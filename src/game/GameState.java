@@ -115,6 +115,7 @@ public class GameState
     public Hand  getP2Hand()      { return p2_hand;      }
     public Board getBoard()       { return board;        }
     public Deck  getDiscardDeck() { return discard_deck; }
+    public Deck  getMainDeck()    { return main_deck;    }
 
     public void setSeed(int seed)
     {

@@ -32,10 +32,23 @@ public class Deck
             add(c);
     }
 
-    // TODO
-    public Deck clone()
+    public Deck deepCopy()
     {
-        return new Deck();
+        Deck new_object = new Deck();
+        for (Card c:cards)
+        {
+            if (c.isNumberCard())
+            {
+                NumberCard new_c = new NumberCard(c.getNumber());
+                new_object.add(new_c);
+            }
+            else
+            {
+                SpecialCard new_c = new SpecialCard(c.getType());
+                new_object.add(new_c);
+            }
+        }
+        return new_object;
     }
 
     public Card pop()

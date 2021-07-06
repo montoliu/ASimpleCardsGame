@@ -27,10 +27,23 @@ public class Hand
 
     public boolean isEmpty() { return cards.isEmpty(); }
 
-    // TODO
-    public Hand clone()
+    public Hand deepCopy()
     {
-        return new Hand();
+        Hand new_object = new Hand();
+        for (Card c:cards)
+        {
+            if (c.isNumberCard())
+            {
+                NumberCard new_c = new NumberCard(c.getNumber());
+                new_object.add(new_c);
+            }
+            else
+            {
+                SpecialCard new_c = new SpecialCard(c.getType());
+                new_object.add(new_c);
+            }
+        }
+        return new_object;
     }
 
     public int getNumberOfCards() {return cards.size(); }

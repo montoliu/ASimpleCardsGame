@@ -19,8 +19,8 @@ public class Observation
         turn         = gs.getTurn();
         p1_score     = gs.getP1Score();
         p2_score     = gs.getP2Score();
-        board        = gs.getBoard().clone();
-        discard_deck = gs.getDiscardDeck().clone();
+        board        = gs.getBoard().deepCopy();
+        discard_deck = gs.getDiscardDeck().deepCopy();
 
         if (gs.isP1Turn())
             FillP1(gs);
@@ -30,11 +30,13 @@ public class Observation
 
     private void FillP1(GameState gs)
     {
-        p1_hand = gs.getP1Hand().clone();
+        p1_hand   = gs.getP1Hand().deepCopy();
+        p2_hand   = new Hand();
+        main_deck = new Deck();
 
         Deck temp = new Deck();
-        temp.addAll(p2_hand.getCards());
-        temp.addAll(main_deck.getCards());
+        temp.addAll(gs.getP2Hand().getCards());
+        temp.addAll(gs.getMainDeck().getCards());
         temp.shuffle();
 
         // draw P2
@@ -45,27 +47,29 @@ public class Observation
             p2_hand.add(c);
         }
 
-        board.addAll(temp.getCards());
+        main_deck.addAll(temp.getCards());
     }
 
     private void FillP2(GameState gs)
     {
-        p2_hand = gs.getP2Hand().clone();
+        p2_hand   = gs.getP2Hand().deepCopy();
+        p1_hand   = new Hand();
+        main_deck = new Deck();
 
         Deck temp = new Deck();
-        temp.addAll(p2_hand.getCards());
-        temp.addAll(main_deck.getCards());
+        temp.addAll(gs.getP1Hand().getCards());
+        temp.addAll(gs.getMainDeck().getCards());
         temp.shuffle();
 
         // draw P1
-        int n_cards_on_hand = gs.getP2Hand().getNumberOfCards();
+        int n_cards_on_hand = gs.getP1Hand().getNumberOfCards();
         for (int i=0; i<n_cards_on_hand; i++)
         {
             Card c = temp.pop();
-            p2_hand.add(c);
+            p1_hand.add(c);
         }
 
-        board.addAll(temp.getCards());
+        main_deck.addAll(temp.getCards());
     }
 
 
@@ -79,5 +83,16 @@ public class Observation
         List<Action> actions = new ArrayList<>();
 
         return actions;
+    }
+
+    public String toString()
+    {
+        return "\nP1 score    : "  + p1_score +
+                "\nP2 score    : " + p2_score +
+                "\nP1 Hand     : " + p1_hand +
+                "\nP2 Hand     : " + p2_hand +
+                "\nBoard       : " + board +
+                "\nMain deck   : " + main_deck +
+                "\nDiscard deck: " + discard_deck;
     }
 }

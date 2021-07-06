@@ -31,10 +31,23 @@ public class Board
 
     public boolean isEmpty() { return cards.isEmpty(); }
 
-    // TODO
-    public Board clone()
+    public Board deepCopy()
     {
-        return new Board();
+        Board new_object = new Board();
+        for (Card c:cards)
+        {
+            if (c.isNumberCard())
+            {
+                NumberCard new_c = new NumberCard(c.getNumber());
+                new_object.add(new_c);
+            }
+            else
+            {
+                SpecialCard new_c = new SpecialCard(c.getType());
+                new_object.add(new_c);
+            }
+        }
+        return new_object;
     }
 
 
