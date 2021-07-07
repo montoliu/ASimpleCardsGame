@@ -32,6 +32,7 @@ public class Observation
         discard_deck = gs.getDiscardDeck().deepCopy();
         factor       = gs.getFactor();
 
+        // Randomize hidden part of the game
         if (gs.isP1Turn()) FillP1(gs);
         else               FillP2(gs);
     }

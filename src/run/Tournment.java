@@ -44,31 +44,7 @@ public class Tournment
         Game game = new Game(gp);
 
         game.start();
-        while (game.notFinished())
-        {
-            // Player 1 turn
-            for (int ap = 0; ap < gp.number_of_action_points; ap++)
-            {
-                Action a = p1.act(game.getObservation(), budget);
-                if (a == null)
-                    break;
-                game.step(a);
-            }
-
-            game.nextPlayerTurn();
-            if (game.notFinished())
-            {
-                // Player 2 turn
-                for (int ap = 0; ap < gp.number_of_action_points; ap++)
-                {
-                    Action a = p2.act(game.getObservation(), budget);
-                    if (a == null)
-                        break;
-                    game.step(a);
-                }
-            }
-            game.nextPlayerTurn();
-        }
+        game.run(p1, p2, budget);
         System.out.println(p1.title() + " vs " + p2.title() + " -> " + game.getWinner());
         return game.getWinner();
     }

@@ -1,7 +1,8 @@
 package players;
 
 import actions.Action;
-import game.ForwardModel;
+import game.GameState;
+import rules.SimpleForwardModel;
 import game.Observation;
 import heuristics.Heuristic;
 import heuristics.SimpleHeuristic;
@@ -11,20 +12,21 @@ import java.util.List;
 public class GreedyPlayer implements Player
 {
     @Override
-    public Action act(Observation obs, int budget)
+    public Action act(GameState gs, int budget)
     {
-        List<Action> actions = obs.getPossibleActions();
+        List<Action> actions = gs.getPossibleActions();
         if (actions.size() == 0) return null;
 
         Heuristic    h  = new SimpleHeuristic();
-        ForwardModel fm = new ForwardModel();
+        SimpleForwardModel fm = new SimpleForwardModel();
 
         double best_score = -100000;
         double score;
         Action best_action = null;
+
         for (Action a : actions)
         {
-            Observation temp = obs.deepCopy();
+            GameState temp = gs.deepCopy();
             fm.step(temp, a);
 
             score = h.getScore(temp);

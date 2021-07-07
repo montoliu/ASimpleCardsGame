@@ -3,7 +3,7 @@ package tests;
 import actions.Action;
 import game.Game;
 import game.GameParameters;
-import game.Observation;
+import game.GameState;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ public class TestObservation
         Game           game   = new Game(gp);
         game.start();
 
-        Observation obs = game.getObservation();
+        GameState obs = game.getObservation();
 
         System.out.println("Observation: ");
         System.out.println(obs);

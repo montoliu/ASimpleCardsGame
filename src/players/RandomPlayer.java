@@ -1,6 +1,7 @@
 package players;
 
 import actions.Action;
+import game.GameState;
 import game.Observation;
 
 import java.util.List;
@@ -22,9 +23,9 @@ public class RandomPlayer implements Player
     }
 
     @Override
-    public Action act(Observation obs, int budget)
+    public Action act(GameState gs, int budget)
     {
-        List<Action> actions = obs.getPossibleActions();
+        List<Action> actions = gs.getPossibleActions();
 
         if (actions.size() == 0)
             return null;

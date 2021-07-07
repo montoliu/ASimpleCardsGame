@@ -1,12 +1,14 @@
 package game;
 
 import actions.Action;
+import players.Player;
+import rules.SimpleForwardModel;
 
 public class Game
 {
     private       GameState      gs;
     private final GameParameters gp;
-    private       ForwardModel   fm;
+    private SimpleForwardModel fm;
     int           seed;
 
     public Game(GameParameters gp)
@@ -18,18 +20,45 @@ public class Game
     public void start()
     {
         gs = new GameState(gp);
-        fm = new ForwardModel();
+        fm = new SimpleForwardModel();
 
         gs.setSeed(seed);
         gs.initialize();
     }
 
+    public void run(Player p1, Player p2, int budget)
+    {
+        while (notFinished())
+        {
+            // Player 1 turn
+            for (int ap=0; ap<gp.number_of_action_points; ap++)
+            {
+                Action a = p1.act(getObservation(), budget);
+                if (a == null) break;
+                step(a);
+            }
+
+            nextPlayerTurn();
+            if (notFinished())
+            {
+                // Player 2 turn
+                for (int ap = 0; ap < gp.number_of_action_points; ap++)
+                {
+                    Action a = p2.act(getObservation(), budget);
+                    if (a == null) break;
+                    step(a);
+                }
+            }
+            nextPlayerTurn();
+        }
+    }
+
     public void        setSeed(int seed)  { this.seed = seed;           }
     public boolean     notFinished()      { return !gs.isTerminal();    }
-    public Observation getObservation()   { return new Observation(gs); }
     public void        step(Action a)     { fm.step(gs, a);             }
-
+    public GameState   getObservation()   { return gs.getObservation(); }
     public void       nextPlayerTurn()    { gs.nextPlayerTurn();        }
+
 
     public int getWinner()
     {

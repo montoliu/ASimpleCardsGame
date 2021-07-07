@@ -1,6 +1,10 @@
 package game;
 
+import actions.Action;
 import components.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameState
 {
@@ -15,6 +19,8 @@ public class GameState
     double factor;
 
     GameParameters gp;
+
+    public GameState() {}
 
     public GameState(GameParameters gp)
     {
@@ -131,8 +137,121 @@ public class GameState
     public void updateFactor(double factor) { this.factor = this.factor * factor; }
     public void resetFactor()               { factor = 1.0; }
 
+    // TODO: Repensar
     public boolean isTerminal()  { return p2_hand.isEmpty() || board.isEmpty(); }
     public boolean isP1Turn()    { return turn == 1;                            }
+
+
+    public GameState getObservation()
+    {
+        GameState obs = new GameState();
+
+        obs.turn         = turn;
+        obs.p1_score     = p1_score;
+        obs.p2_score     = p2_score;
+        obs.board        = board.deepCopy();
+        obs.discard_deck = discard_deck.deepCopy();
+        obs.factor       = factor;
+        obs.gp           = gp;
+
+        if (isP1Turn()) RandomizeHiddenInformationP1(obs);
+        else            RandomizeHiddenInformationP2(obs);
+        return obs;
+    }
+
+    private void RandomizeHiddenInformationP1(GameState obs)
+    {
+        obs.p1_hand   = p1_hand.deepCopy();
+        obs.p2_hand   = new Hand();
+        obs.main_deck = new Deck();
+
+        Deck temp = new Deck();
+        temp.addAll(p2_hand.getCards());
+        temp.addAll(main_deck.getCards());
+        temp.shuffle();
+
+        // draw P2
+        int n_cards_on_hand = p2_hand.getNumberOfCards();
+        for (int i=0; i<n_cards_on_hand; i++)
+        {
+            Card c = temp.pop();
+            obs.p2_hand.add(c);
+        }
+
+        obs.main_deck.addAll(temp.getCards());
+    }
+
+    private void RandomizeHiddenInformationP2(GameState obs)
+    {
+        obs.p1_hand   = p2_hand.deepCopy();
+        obs.p2_hand   = new Hand();
+        obs.main_deck = new Deck();
+
+        Deck temp = new Deck();
+        temp.addAll(p1_hand.getCards());
+        temp.addAll(main_deck.getCards());
+        temp.shuffle();
+
+        // draw P1
+        int n_cards_on_hand = p1_hand.getNumberOfCards();
+        for (int i=0; i<n_cards_on_hand; i++)
+        {
+            Card c = temp.pop();
+            obs.p1_hand.add(c);
+        }
+
+        obs.main_deck.addAll(temp.getCards());
+
+    }
+
+    // Return a list of all possible actions that can be played given the actual state of the observation (game state)
+    public List<Action> getPossibleActions()
+    {
+        List<Action> actions = new ArrayList<>();
+        Hand h;
+        if (turn==1) h = p1_hand;
+        else         h = p2_hand;
+
+        for (int i=0; i < h.getNumberOfCards(); i++)
+        {
+            Card player_card = h.getCard(i);
+            if (player_card.isNumberCard())
+            {
+                for (int j =0; j < board.getNumberOfCards(); j++)
+                {
+                    Card board_card = board.getCard(j);
+                    Action a = new Action(i, j);
+                    actions.add(a);
+                }
+            }
+            else
+            {
+                Action a = new Action(i);
+                actions.add(a);
+            }
+        }
+
+        return actions;
+    }
+
+    public GameState deepCopy()
+    {
+        GameState new_object = new GameState();
+
+        new_object.turn     = turn;
+        new_object.p1_score = p1_score;
+        new_object.p2_score = p2_score;
+        new_object.factor   = factor;
+        new_object.gp       = gp;
+
+        new_object.p1_hand      = p1_hand.deepCopy();
+        new_object.p2_hand      = p2_hand.deepCopy();
+        new_object.board        = board.deepCopy();
+        new_object.main_deck    = main_deck.deepCopy();
+        new_object.discard_deck = discard_deck.deepCopy();
+
+        return new_object;
+    }
 
     public String toString()
     {

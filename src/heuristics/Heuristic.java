@@ -1,8 +1,8 @@
 package heuristics;
 
-import game.Observation;
+import game.GameState;
 
 public interface Heuristic
 {
-    public double getScore(Observation obs);
+    public double getScore(GameState gs);
 }

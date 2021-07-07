@@ -14,7 +14,7 @@ public class GameParameters
 
     public GameParameters ()
     {
-        number_cards_on_board      = 10;
+        number_cards_on_board      = 12;
         number_cards_on_hand       = 6;
         number_of_action_points    = 3;
         min_number                 = 1;

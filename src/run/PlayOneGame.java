@@ -12,7 +12,7 @@ public class PlayOneGame
     public static void main(String[] args)
     {
         GameParameters gp     = new GameParameters();
-        Game game   = new Game(gp);
+        Game           game   = new Game(gp);
         int            budget = 1000;
 
         Player p1 = new GreedyPlayer();
@@ -23,33 +23,7 @@ public class PlayOneGame
         //game.setSeed(1);
 
         game.start();
-        while (game.notFinished())
-        {
-            // Player 1 turn
-            for (int ap=0; ap<gp.number_of_action_points; ap++)
-            {
-                Action a = p1.act(game.getObservation(), budget);
-                if (a == null)
-                    break;
-                game.step(a);
-            }
-
-            game.nextPlayerTurn();
-            if (game.notFinished())
-            {
-                // Player 2 turn
-                for (int ap = 0; ap < gp.number_of_action_points; ap++)
-                {
-                    Action a = p2.act(game.getObservation(), budget);
-                    if (a == null)
-                        break;
-                    game.step(a);
-                }
-            }
-            game.nextPlayerTurn();
-        }
-        int winner = game.getWinner();
-
-        System.out.println("The winner is the player " + winner + " -> Score: " + game.getP1Score() + " , " + game.getP2Score());
+        game.run(p1, p2, budget);
+        System.out.println(p1.title() + " vs " + p2.title() + " : " + game.getWinner() + " -> Score: " + game.getP1Score() + " , " + game.getP2Score());
     }
 }

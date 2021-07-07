@@ -1,11 +1,12 @@
 package players;
 
 import actions.Action;
-import game.Observation;
+import game.Game;
+import game.GameState;
 
 public interface Player
 {
-    public Action act(Observation obs, int budget);
+    public Action act(GameState gs, int budget);
     public String title();
     public void   setSeed(int seed);
 }

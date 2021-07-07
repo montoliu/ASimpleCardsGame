@@ -1,12 +1,13 @@
 package heuristics;
 
+import game.GameState;
 import game.Observation;
 
 public class SimpleHeuristic implements Heuristic
 {
     @Override
-    public double getScore(Observation obs)
+    public double getScore(GameState gs)
     {
-        return obs.getP1Score() - obs.getP2Score();
+        return gs.getP1Score() - gs.getP2Score();
     }
 }
