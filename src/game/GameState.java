@@ -1,18 +1,18 @@
 package game;
 
-import javax.net.ssl.SNIHostName;
-import java.util.List;
+import components.*;
 
 public class GameState
 {
-    Hand  p1_hand;
-    Hand  p2_hand;
-    Board board;
-    Deck  main_deck;
-    Deck  discard_deck;
-    int   turn;
-    int   p1_score;
-    int   p2_score;
+    Hand   p1_hand;
+    Hand   p2_hand;
+    Board  board;
+    Deck   main_deck;
+    Deck   discard_deck;
+    int    turn;
+    double p1_score;
+    double p2_score;
+    double factor;
 
     GameParameters gp;
 
@@ -36,11 +36,18 @@ public class GameState
         discard_deck.clear();
 
         turn     = 1;
-        p1_score = 0;
-        p2_score = 0;
+        p1_score = 0.0;
+        p2_score = 0.0;
+        factor   = 1.0;
 
         createMainDeck();
         drawCards();
+    }
+
+    public void nextPlayerTurn()
+    {
+        if (turn == 1) turn = 2;
+        else           turn = 1;
     }
 
     private void createMainDeck()
@@ -103,24 +110,26 @@ public class GameState
         }
     }
 
-    public GameState Clone()
-    {
-        return null;
-    }
-
-    public int   getP1Score()     { return p1_score;     }
-    public int   getP2Score()     { return p2_score;     }
-    public int   getTurn()        { return turn;         }
-    public Hand  getP1Hand()      { return p1_hand;      }
-    public Hand  getP2Hand()      { return p2_hand;      }
-    public Board getBoard()       { return board;        }
-    public Deck  getDiscardDeck() { return discard_deck; }
-    public Deck  getMainDeck()    { return main_deck;    }
+    public double getP1Score()     { return p1_score;     }
+    public double getP2Score()     { return p2_score;     }
+    public int    getTurn()        { return turn;         }
+    public Hand   getP1Hand()      { return p1_hand;      }
+    public Hand   getP2Hand()      { return p2_hand;      }
+    public Board  getBoard()       { return board;        }
+    public Deck   getDiscardDeck() { return discard_deck; }
+    public Deck   getMainDeck()    { return main_deck;    }
+    public double getFactor()      { return factor;       }
 
     public void setSeed(int seed)
     {
         main_deck.setSeed(seed);
     }
+
+    public void addP1Score(double score) { p1_score += score; }
+    public void addP2Score(double score) { p2_score += score; }
+
+    public void updateFactor(double factor) { this.factor = this.factor * factor; }
+    public void resetFactor()               { factor = 1.0; }
 
     public boolean isTerminal()  { return p2_hand.isEmpty() || board.isEmpty(); }
     public boolean isP1Turn()    { return turn == 1;                            }

@@ -1,14 +1,19 @@
-package game;
+package components;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
-public class Board
+public class Deck
 {
     private List<Card> cards;
-    public Board()
+    private int        seed;
+
+    public Deck()
     {
         cards = new ArrayList<>();
+        seed  = -1;
     }
 
     public void clear()
@@ -27,13 +32,9 @@ public class Board
             add(c);
     }
 
-    public List<Card> getCards () { return cards; }
-
-    public boolean isEmpty() { return cards.isEmpty(); }
-
-    public Board deepCopy()
+    public Deck deepCopy()
     {
-        Board new_object = new Board();
+        Deck new_object = new Deck();
         for (Card c:cards)
         {
             if (c.isNumberCard())
@@ -50,6 +51,29 @@ public class Board
         return new_object;
     }
 
+    public Card pop()
+    {
+        Card c = cards.get(0);
+        cards.remove(0);
+        return c;
+    }
+
+    public void shuffle()
+    {
+        Random r;
+        if (seed != -1)
+            r = new Random(seed);
+        else
+            r = new Random();
+
+        Collections.shuffle(cards, r);
+    }
+
+    public void setSeed(int seed)    {  this.seed = seed;  }
+
+    public boolean isEmpty() { return cards.isEmpty(); }
+
+    public List<Card> getCards () { return cards; }
 
     public String toString()
     {

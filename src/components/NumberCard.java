@@ -1,4 +1,6 @@
-package game;
+package components;
+
+import components.Card;
 
 public class NumberCard extends Card
 {

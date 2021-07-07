@@ -1,4 +1,4 @@
-package game;
+package components;
 
 public class Card
 {

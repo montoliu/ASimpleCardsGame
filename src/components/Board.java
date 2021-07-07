@@ -1,14 +1,12 @@
-package game;
+package components;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-public class Hand
+public class Board
 {
     private List<Card> cards;
-
-    public Hand()
+    public Board()
     {
         cards = new ArrayList<>();
     }
@@ -23,13 +21,23 @@ public class Hand
         cards.add(c);
     }
 
+    public void remove(int idx) { cards.remove(idx); }
+
+    public void addAll(List<Card> l)
+    {
+        for (Card c : l)
+            add(c);
+    }
+
     public List<Card> getCards () { return cards; }
+
+    public Card getCard(int ith) { return cards.get(ith); }
 
     public boolean isEmpty() { return cards.isEmpty(); }
 
-    public Hand deepCopy()
+    public Board deepCopy()
     {
-        Hand new_object = new Hand();
+        Board new_object = new Board();
         for (Card c:cards)
         {
             if (c.isNumberCard())

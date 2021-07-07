@@ -1,9 +1,9 @@
 package tests;
 
-import game.Card;
-import game.Deck;
-import game.NumberCard;
-import game.SpecialCard;
+import components.Card;
+import components.Deck;
+import components.NumberCard;
+import components.SpecialCard;
 
 public class TestDeepCopy
 {
