@@ -183,8 +183,8 @@ public class GameState
 
     private void RandomizeHiddenInformationP2(GameState obs)
     {
-        obs.p1_hand   = p2_hand.deepCopy();
-        obs.p2_hand   = new Hand();
+        obs.p2_hand   = p2_hand.deepCopy();
+        obs.p1_hand   = new Hand();
         obs.main_deck = new Deck();
 
         Deck temp = new Deck();
