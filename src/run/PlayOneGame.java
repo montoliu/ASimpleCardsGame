@@ -4,6 +4,7 @@ import actions.Action;
 import game.Game;
 import game.GameParameters;
 import players.GreedyPlayer;
+import players.MCTSPlayer;
 import players.Player;
 import players.RandomPlayer;
 
@@ -14,13 +15,14 @@ public class PlayOneGame
         GameParameters gp     = new GameParameters();
         Game           game   = new Game(gp);
         int            budget = 1000;
+        int            seed   = -1;
 
-        Player p1 = new GreedyPlayer();
-        Player p2 = new RandomPlayer();
+        Player p1 = new RandomPlayer();
+        Player p2 = new MCTSPlayer();
 
-        //p1.setSeed(1);
-        //p2.setSeed(1);
-        //game.setSeed(1);
+        p1.setSeed(seed);
+        p2.setSeed(seed);
+        game.setSeed(seed);
 
         game.start();
         game.run(p1, p2, budget);
