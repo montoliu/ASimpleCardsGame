@@ -1,7 +1,6 @@
 package heuristics;
 
 import game.GameState;
-import game.Observation;
 
 public class SimpleHeuristic implements Heuristic
 {

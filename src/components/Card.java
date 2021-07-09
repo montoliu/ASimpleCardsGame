@@ -11,15 +11,18 @@ public class Card
 
     CardType type;
     int      number;
+    int      id;      // Unique id.
 
-    public Card(CardType type, int number)
+    public Card(int id, CardType type, int number)
     {
+        this.id     = id;
         this.type   = type;
         this.number = number;
     }
 
     public CardType getType()   { return type;   }
     public int      getNumber() { return number; }
+    public int      getId()     { return id;     }
 
     public boolean isNumberCard()  { return type == CardType.Number; }
 }

@@ -8,7 +8,7 @@ public class Game
 {
     private       GameState      gs;
     private final GameParameters gp;
-    private SimpleForwardModel fm;
+    private SimpleForwardModel   fm;
     int           seed;
 
     public Game(GameParameters gp)
@@ -31,7 +31,7 @@ public class Game
         while (notFinished())
         {
             // Player 1 turn
-            for (int ap=0; ap<gp.number_of_action_points; ap++)
+            while (gs.getActionPointsLeft() > 0)
             {
                 Action a = p1.act(getObservation(), budget);
                 if (a == null) break;
@@ -42,7 +42,7 @@ public class Game
             if (notFinished())
             {
                 // Player 2 turn
-                for (int ap = 0; ap < gp.number_of_action_points; ap++)
+                while (gs.getActionPointsLeft() > 0)
                 {
                     Action a = p2.act(getObservation(), budget);
                     if (a == null) break;

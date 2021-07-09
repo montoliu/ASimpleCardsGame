@@ -4,13 +4,13 @@ import components.Card;
 
 public class NumberCard extends Card
 {
-    public NumberCard(int number)
+    public NumberCard(int id, int number)
     {
-        super(CardType.Number, number);
+        super(id, CardType.Number, number);
     }
 
     public String toString()
     {
-        return String.valueOf(number);
+        return "[" +id + "] " + number;
     }
 }

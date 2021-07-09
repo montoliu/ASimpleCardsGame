@@ -11,13 +11,13 @@ public class TestDeck
     {
         Deck d = new Deck();
 
-        NumberCard c1 = new NumberCard(1);
-        NumberCard c2 = new NumberCard(2);
-        NumberCard c3 = new NumberCard(3);
-        NumberCard c4 = new NumberCard(4);
-        NumberCard c5 = new NumberCard(5);
-        SpecialCard c6 = new SpecialCard(Card.CardType.Mult2);
-        SpecialCard c7 = new SpecialCard(Card.CardType.Div2);
+        NumberCard c1 = new NumberCard(1, 1);
+        NumberCard c2 = new NumberCard(2, 2);
+        NumberCard c3 = new NumberCard(3, 3);
+        NumberCard c4 = new NumberCard(4, 4);
+        NumberCard c5 = new NumberCard(5, 5);
+        SpecialCard c6 = new SpecialCard(6, Card.CardType.Mult2);
+        SpecialCard c7 = new SpecialCard(7, Card.CardType.Div2);
 
         System.out.println("We are going to insert the next cards into a deck:");
         System.out.println(c1);

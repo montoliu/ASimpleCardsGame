@@ -1,9 +1,8 @@
 package rules;
 
 import actions.Action;
-import components.Board;
 import components.Card;
-import components.Hand;
+import components.CardCollection;
 import game.GameState;
 
 public class SimpleForwardModel implements ForwardModel
@@ -12,11 +11,11 @@ public class SimpleForwardModel implements ForwardModel
     @Override
     public void step(GameState gs, Action a)
     {
-        Hand h;
+        CardCollection h;
         if (gs.getTurn() == 1) h = gs.getP1Hand();
         else                   h = gs.getP2Hand();
 
-        Board b = gs.getBoard();
+        CardCollection b = gs.getBoard();
 
         Card card_to_play = h.getCard(a.GetPlayerCardId());
 
@@ -50,5 +49,7 @@ public class SimpleForwardModel implements ForwardModel
             gs.getDiscardDeck().add(card_to_play);
             h.remove(a.GetPlayerCardId());
         }
+
+        gs.decrementActionPointsLeft();
     }
 }

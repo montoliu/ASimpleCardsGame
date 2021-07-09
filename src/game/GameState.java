@@ -8,15 +8,18 @@ import java.util.List;
 
 public class GameState
 {
-    Hand   p1_hand;
-    Hand   p2_hand;
-    Board  board;
+    CardCollection p1_hand;
+    CardCollection p2_hand;
+    CardCollection board;
+
     Deck   main_deck;
     Deck   discard_deck;
     int    turn;
     double p1_score;
     double p2_score;
     double factor;
+    int    action_points_left;
+
 
     GameParameters gp;
 
@@ -24,9 +27,9 @@ public class GameState
 
     public GameState(GameParameters gp)
     {
-        p1_hand      = new Hand();
-        p2_hand      = new Hand();
-        board        = new Board();
+        p1_hand      = new CardCollection();
+        p2_hand      = new CardCollection();
+        board        = new CardCollection();
         main_deck    = new Deck();
         discard_deck = new Deck();
 
@@ -46,6 +49,8 @@ public class GameState
         p2_score = 0.0;
         factor   = 1.0;
 
+        action_points_left = gp.number_of_action_points;
+
         createMainDeck();
         drawCards();
     }
@@ -54,38 +59,46 @@ public class GameState
     {
         if (turn == 1) turn = 2;
         else           turn = 1;
+
+        action_points_left = gp.number_of_action_points;
     }
 
     private void createMainDeck()
     {
+        int id = 1;
+
         // Number cards
         for (int n = gp.min_number; n <= gp.max_number; n++)
         {
             if (n == gp.min_number || n == gp.max_number)
                 for (int i=0; i<gp.number_cards_limit_number; i++)
                 {
-                    NumberCard c = new NumberCard(n);
+                    NumberCard c = new NumberCard(id, n);
                     main_deck.add(c);
+                    id += 1;
                 }
             else
                 for (int i=0; i<gp.number_cards_normal_number; i++)
                 {
-                    NumberCard c = new NumberCard(n);
+                    NumberCard c = new NumberCard(id, n);
                     main_deck.add(c);
+                    id += 1;
                 }
         }
 
         // Special cards
         for (int i=0; i<gp.number_cards_mult2; i++)
         {
-            SpecialCard c = new SpecialCard(Card.CardType.Mult2);
+            SpecialCard c = new SpecialCard(id, Card.CardType.Mult2);
             main_deck.add(c);
+            id += 1;
         }
 
         for (int i=0; i<gp.number_cards_div2; i++)
         {
-            SpecialCard c = new SpecialCard(Card.CardType.Div2);
+            SpecialCard c = new SpecialCard(id, Card.CardType.Div2);
             main_deck.add(c);
+            id += 1;
         }
 
         main_deck.shuffle();
@@ -119,12 +132,14 @@ public class GameState
     public double getP1Score()     { return p1_score;     }
     public double getP2Score()     { return p2_score;     }
     public int    getTurn()        { return turn;         }
-    public Hand   getP1Hand()      { return p1_hand;      }
-    public Hand   getP2Hand()      { return p2_hand;      }
-    public Board  getBoard()       { return board;        }
     public Deck   getDiscardDeck() { return discard_deck; }
     public Deck   getMainDeck()    { return main_deck;    }
     public double getFactor()      { return factor;       }
+    public int    getActionPointsLeft() { return action_points_left; }
+
+    public CardCollection getP1Hand() { return p1_hand; }
+    public CardCollection getP2Hand() { return p2_hand; }
+    public CardCollection getBoard()  { return board;   }
 
     public void setSeed(int seed)
     {
@@ -153,6 +168,7 @@ public class GameState
         obs.discard_deck = discard_deck.deepCopy();
         obs.factor       = factor;
         obs.gp           = gp;
+        obs.action_points_left = action_points_left;
 
         if (isP1Turn()) RandomizeHiddenInformationP1(obs);
         else            RandomizeHiddenInformationP2(obs);
@@ -162,11 +178,11 @@ public class GameState
     private void RandomizeHiddenInformationP1(GameState obs)
     {
         obs.p1_hand   = p1_hand.deepCopy();
-        obs.p2_hand   = new Hand();
+        obs.p2_hand   = new CardCollection();
         obs.main_deck = new Deck();
 
         Deck temp = new Deck();
-        temp.addAll(p2_hand.getCards());
+        temp.addAll(p2_hand);
         temp.addAll(main_deck.getCards());
         temp.shuffle();
 
@@ -184,7 +200,7 @@ public class GameState
     private void RandomizeHiddenInformationP2(GameState obs)
     {
         obs.p2_hand   = p2_hand.deepCopy();
-        obs.p1_hand   = new Hand();
+        obs.p1_hand   = new CardCollection();
         obs.main_deck = new Deck();
 
         Deck temp = new Deck();
@@ -201,32 +217,35 @@ public class GameState
         }
 
         obs.main_deck.addAll(temp.getCards());
-
     }
+
+    public void decrementActionPointsLeft() { action_points_left -= 1; }
+
+    public  int getNumberActionPoints()  { return gp.number_of_action_points; }
 
     // Return a list of all possible actions that can be played given the actual state of the observation (game state)
     public List<Action> getPossibleActions()
     {
         List<Action> actions = new ArrayList<>();
-        Hand h;
-        if (turn==1) h = p1_hand;
-        else         h = p2_hand;
+        CardCollection hand;
+        if (turn==1) hand = p1_hand;
+        else         hand = p2_hand;
 
-        for (int i=0; i < h.getNumberOfCards(); i++)
+        List<Card> cards_on_hand  = hand.getCards();
+        List<Card> cards_on_board = board.getCards();
+        for (Card player_card : cards_on_hand)
         {
-            Card player_card = h.getCard(i);
             if (player_card.isNumberCard())
             {
-                for (int j =0; j < board.getNumberOfCards(); j++)
+                for (Card board_card : cards_on_board)
                 {
-                    Card board_card = board.getCard(j);
-                    Action a = new Action(i, j);
+                    Action a = new Action(player_card.getId(), board_card.getId());
                     actions.add(a);
                 }
             }
             else
             {
-                Action a = new Action(i);
+                Action a = new Action(player_card.getId());
                 actions.add(a);
             }
         }
@@ -243,6 +262,7 @@ public class GameState
         new_object.p2_score = p2_score;
         new_object.factor   = factor;
         new_object.gp       = gp;
+        new_object.action_points_left = action_points_left;
 
         new_object.p1_hand      = p1_hand.deepCopy();
         new_object.p2_hand      = p2_hand.deepCopy();
@@ -255,12 +275,14 @@ public class GameState
 
     public String toString()
     {
-        return "\nP1 score    : "  + getP1Score() +
-                "\nP2 score    : " + getP2Score() +
-                "\nP1 Hand     : " + p1_hand +
-                "\nP2 Hand     : " + p2_hand +
-                "\nBoard       : " + board +
-                "\nMain deck   : " + main_deck +
+        return    "Turn        : " + getTurn()          +
+                "\nP1 score    : " + getP1Score()       +
+                "\nP2 score    : " + getP2Score()       +
+                "\nAP left     : " + action_points_left +
+                "\nP1 Hand     : " + p1_hand            +
+                "\nP2 Hand     : " + p2_hand            +
+                "\nBoard       : " + board              +
+                "\nMain deck   : " + main_deck          +
                 "\nDiscard deck: " + discard_deck;
     }
 }

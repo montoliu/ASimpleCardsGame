@@ -1,9 +1,6 @@
 package components;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Deck
 {
@@ -32,6 +29,14 @@ public class Deck
             add(c);
     }
 
+    public void addAll(CardCollection cc)
+    {
+        for (Card c : cc.getCards())
+        {
+            add(c);
+        }
+    }
+
     public Deck deepCopy()
     {
         Deck new_object = new Deck();
@@ -39,12 +44,12 @@ public class Deck
         {
             if (c.isNumberCard())
             {
-                NumberCard new_c = new NumberCard(c.getNumber());
+                NumberCard new_c = new NumberCard(c.getId(), c.getNumber());
                 new_object.add(new_c);
             }
             else
             {
-                SpecialCard new_c = new SpecialCard(c.getType());
+                SpecialCard new_c = new SpecialCard(c.getId(), c.getType());
                 new_object.add(new_c);
             }
         }

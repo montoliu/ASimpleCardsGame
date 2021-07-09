@@ -3,7 +3,6 @@ package players;
 import actions.Action;
 import game.GameState;
 import rules.SimpleForwardModel;
-import game.Observation;
 import heuristics.Heuristic;
 import heuristics.SimpleHeuristic;
 
@@ -17,10 +16,10 @@ public class GreedyPlayer implements Player
         List<Action> actions = gs.getPossibleActions();
         if (actions.size() == 0) return null;
 
-        Heuristic    h  = new SimpleHeuristic();
+        Heuristic           h  = new SimpleHeuristic();
         SimpleForwardModel fm = new SimpleForwardModel();
 
-        double best_score = -100000;
+        double best_score = Integer.MIN_VALUE;
         double score;
         Action best_action = null;
 

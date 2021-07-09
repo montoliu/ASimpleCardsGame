@@ -2,7 +2,6 @@ package players;
 
 import actions.Action;
 import game.GameState;
-import game.Observation;
 
 import java.util.List;
 import java.util.Random;
