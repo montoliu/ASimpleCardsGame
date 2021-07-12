@@ -3,19 +3,23 @@ package players;
 import actions.Action;
 import game.GameState;
 import players.mcts.MCTSTree;
+import rules.ForwardModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MCTSPlayer implements Player
 {
-    int seed;
+    int          seed;
+    int          budget;
     List<Action> turn;
+    ForwardModel fm;
 
-    public MCTSPlayer()
+    public MCTSPlayer(int budget)
     {
         seed = -1;
         turn = new ArrayList<>();
+        this.budget = budget;
     }
 
     @Override
@@ -36,6 +40,12 @@ public class MCTSPlayer implements Player
         turn.remove(0);
 
         return action;
+    }
+
+    @Override
+    public void setForwardModel(ForwardModel fm)
+    {
+        this.fm = fm;
     }
 
     @Override

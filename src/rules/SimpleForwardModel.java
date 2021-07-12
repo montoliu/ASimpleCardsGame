@@ -9,7 +9,7 @@ public class SimpleForwardModel implements ForwardModel
 {
     // Actualize the game state gs playing action a
     @Override
-    public void step(GameState gs, Action a)
+    public boolean step(GameState gs, Action a)
     {
         CardCollection h;
         if (gs.getTurn() == 1) h = gs.getP1Hand();
@@ -19,9 +19,14 @@ public class SimpleForwardModel implements ForwardModel
 
         Card card_to_play = h.getCard(a.GetPlayerCardId());
 
+        if (card_to_play==null)
+            return false;
+
         if (a.GetOnPlayerCardId() != -1)
         {
             Card card_on_play = b.getCard(a.GetOnPlayerCardId());
+            if (card_on_play==null)
+                return false;
 
             int    n1    = card_to_play.getNumber();
             int    n2    = card_on_play.getNumber();
@@ -51,5 +56,6 @@ public class SimpleForwardModel implements ForwardModel
         }
 
         gs.decrementActionPointsLeft();
+        return true;
     }
 }

@@ -2,6 +2,7 @@ package players;
 
 import actions.Action;
 import game.GameState;
+import rules.ForwardModel;
 
 import java.util.List;
 import java.util.Random;
@@ -20,6 +21,10 @@ public class RandomPlayer implements Player
     {
         this.seed = seed;
     }
+
+    @Override
+    public void setForwardModel(ForwardModel fm)
+    { }
 
     @Override
     public Action act(GameState gs, int budget)

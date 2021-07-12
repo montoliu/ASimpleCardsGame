@@ -2,32 +2,38 @@ package game;
 
 import actions.Action;
 import players.Player;
+import rules.ForwardModel;
 import rules.SimpleForwardModel;
 
 public class Game
 {
     private       GameState      gs;
     private final GameParameters gp;
-    private SimpleForwardModel   fm;
+    private final ForwardModel   fm;
     int           seed;
 
     public Game(GameParameters gp)
     {
         this.gp   = gp;
-        this.seed = -1;
+        this.seed = gp.seed;
+        this.fm   = gp.fm;
     }
 
     public void start()
     {
         gs = new GameState(gp);
-        fm = new SimpleForwardModel();
-
         gs.setSeed(seed);
         gs.initialize();
     }
 
     public void run(Player p1, Player p2, int budget)
     {
+        p1.setForwardModel(fm);
+        p2.setForwardModel(fm);
+
+        p1.setSeed(seed);
+        p2.setSeed(seed);
+
         while (notFinished())
         {
             // Player 1 turn
@@ -57,7 +63,7 @@ public class Game
     public boolean     notFinished()      { return !gs.isTerminal();    }
     public void        step(Action a)     { fm.step(gs, a);             }
     public GameState   getObservation()   { return gs.getObservation(); }
-    public void       nextPlayerTurn()    { gs.nextPlayerTurn();        }
+    public void        nextPlayerTurn()   { gs.nextPlayerTurn();        }
 
 
     public int getWinner()
