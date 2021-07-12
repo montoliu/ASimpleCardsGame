@@ -18,6 +18,7 @@ public class MCTSNode
     Action         action;
     MCTSNode       parent;
     List<MCTSNode> children;
+    int            seed;
 
     public MCTSNode(GameState gs, Action action, MCTSNode parent)
     {
@@ -28,17 +29,19 @@ public class MCTSNode
         this.action   = action;
         this.parent   = parent;
         this.children = new ArrayList<>();
+
+        seed = -1;
     }
 
-    public double getMean() { return score / (double) visits; }
+    public void setSeed(int seed) { this.seed = seed; }
 
-    public void incrementVisits()         { visits += 1;        }
-    public void updateScore(double score) { this.score += score;}
+    public double getMean()                 { return score / (double) visits; }
+    public void   incrementVisits()         { visits += 1;                    }
+    public void   updateScore(double score) { this.score += score;            }
+    public void   addChild(MCTSNode child)  { children.add(child);            }
+    public Action getAction()               { return action;                  }
 
-    public void addChild(MCTSNode child)  { children.add(child); }
-    public Action getAction() {return action; }
-
-    public MCTSNode getBestChild()
+    public MCTSNode getBestChildScore()
     {
         double  best_mean   = Integer.MIN_VALUE;
         MCTSNode best_child = null;
@@ -54,16 +57,20 @@ public class MCTSNode
         return best_child;
     }
 
-    public MCTSNode get_best_child_ucb()
+    public MCTSNode getBestChildUcb()
     {
         double   best_ucb   = Integer.MIN_VALUE;
         MCTSNode best_child = null;
 
+        Random r;
+        if (seed == -1) r = new Random();
+        else            r = new Random(seed);
+
         for (MCTSNode child : children)
         {
             double ucb;
-            double epsilon = Math.random()/1000; // (0 - 1) / 1000
-            if (child.hasChildren())
+            double epsilon = r.nextDouble() / 1000;
+            if (child.visits != 0)
                 ucb = child.getMean() + C * Math.sqrt(Math.log(visits) / child.visits) + epsilon;
             else
                 ucb = Integer.MAX_VALUE - epsilon;
@@ -92,11 +99,12 @@ public class MCTSNode
             fm.step(temp, a);
 
             MCTSNode node = new MCTSNode(temp, a, this);
+            node.setSeed(seed);
             addChild(node);
         }
     }
 
-    public void rollout_one_random_child(int seed)
+    public void rolloutOneRandomChild(int seed)
     {
         Random r;
         if (seed == -1) r = new Random();
@@ -110,7 +118,7 @@ public class MCTSNode
         children.get(idx).updateScore(score);
         children.get(idx).incrementVisits();
 
-        backpropagate(score);
+        backpropagation(score);
     }
 
     public double rollout()
@@ -119,8 +127,17 @@ public class MCTSNode
         return h.getScore(gs);
     }
 
-    public void backpropagate(double score)
+    public void backpropagation(double score)
     {
-        //TODO
+        updateScore(score);
+        incrementVisits();
+
+        MCTSNode parent_node = parent;
+        while (parent_node != null)
+        {
+            parent_node.incrementVisits();
+            parent_node.updateScore(score);
+            parent_node = parent_node.parent;
+        }
     }
 }

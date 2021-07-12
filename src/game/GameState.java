@@ -11,6 +11,7 @@ public class GameState
     CardCollection p1_hand;
     CardCollection p2_hand;
     CardCollection board;
+    GameParameters gp;
 
     Deck   main_deck;
     Deck   discard_deck;
@@ -19,9 +20,6 @@ public class GameState
     double p2_score;
     double factor;
     int    action_points_left;
-
-
-    GameParameters gp;
 
     public GameState() {}
 
@@ -136,6 +134,8 @@ public class GameState
     public Deck   getMainDeck()    { return main_deck;    }
     public double getFactor()      { return factor;       }
     public int    getActionPointsLeft() { return action_points_left; }
+
+    public GameParameters getGameParameters() { return gp; }
 
     public CardCollection getP1Hand() { return p1_hand; }
     public CardCollection getP2Hand() { return p2_hand; }

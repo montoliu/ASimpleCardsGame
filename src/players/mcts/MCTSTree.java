@@ -5,6 +5,7 @@ import game.GameState;
 import heuristics.SimpleHeuristic;
 import rules.SimpleForwardModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MCTSTree
@@ -19,11 +20,13 @@ public class MCTSTree
     public List<Action> getBestTurn(GameState gs, int budget)
     {
         root = new MCTSNode(gs, null,null);
+        root.setSeed(seed);
+
         List<Action> actions = gs.getPossibleActions();
         SimpleForwardModel fm = new SimpleForwardModel();
         SimpleHeuristic    h  = new SimpleHeuristic();
 
-        // First level: we measure the score in all possibilities on the first action points
+        // First level: we measure the score in all possibilities on the first action point
         for (Action a: actions)
         {
             GameState temp = gs.deepCopy();
@@ -31,6 +34,7 @@ public class MCTSTree
             double score = h.getScore(temp);
 
             MCTSNode node = new MCTSNode(temp, a, root);
+            node.setSeed(seed);
             node.updateScore(score);
             node.incrementVisits();
 
@@ -41,15 +45,15 @@ public class MCTSTree
         // main loop
         MCTSNode actual_node = root;
         int i=0;
-        while (i<1000)  // AQUI tendria que ser por budget
+        while (i<100000)  // TODO AQUI tendria que ser por budget
         {
-            MCTSNode best_child = actual_node.get_best_child_ucb();
+            MCTSNode best_child = actual_node.getBestChildUcb();   // get actual_node child according to ucb
 
             if (best_child.unvisited() || best_child.isTerminal())
             {
-                // not yet visited (or terminal) -> rollout
+                // not yet visited (or terminal) -> rollout and backpropagate score
                 double score = best_child.rollout();
-                best_child.backpropagate(score);
+                best_child.backpropagation(score);
                 actual_node = root;
 
             }
@@ -57,7 +61,7 @@ public class MCTSTree
             {
                 // visited without children
                 best_child.extend();
-                best_child.rollout_one_random_child(seed);
+                best_child.rolloutOneRandomChild(seed);
             }
             else
             {
@@ -67,8 +71,22 @@ public class MCTSTree
             i += 1;
         }
 
-        return null; //recommendTurn();
+        return recommendTurn(gs.getGameParameters().number_of_action_points);
     }
 
+    public List<Action> recommendTurn(int n_aps)
+    {
+        List<Action> turn = new ArrayList<>();
+
+        MCTSNode actual_node = root;
+        for (int ap=0; ap<n_aps; ap++)
+        {
+            MCTSNode best_child = actual_node.getBestChildScore();
+            turn.add(best_child.getAction());
+            actual_node = best_child;
+        }
+
+        return turn;
+    }
 
 }

@@ -15,10 +15,11 @@ public class PlayOneGame
         GameParameters gp     = new GameParameters();
         Game           game   = new Game(gp);
         int            budget = 1000;
-        int            seed   = -1;     // random seed
+        int            seed   = 3;     // random seed
 
-        Player p1 = new RandomPlayer();
-        Player p2 = new GreedyPlayer();
+        Player p1 = new GreedyPlayer();
+        Player p2 = new MCTSPlayer();
+
 
         p1.setSeed(seed);
         p2.setSeed(seed);
