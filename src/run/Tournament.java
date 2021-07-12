@@ -18,7 +18,7 @@ public class Tournament
         int            budget  = 1000;
         int            n_games = 100;
 
-        gp.seed = 1;
+        //gp.seed = 1;
 
         Player p1 = new MCTSPlayer(budget);
         Player p2 = new GreedyPlayer();
@@ -29,7 +29,7 @@ public class Tournament
 
         for (int i = 0; i < n_games; i++)
         {
-            System.out.println(i);
+            //System.out.println(i);
             winner = PlayAGame(p1, p2, gp, budget);
             if (winner == 1)      p1_wins += 1;
             else if (winner == 2) p2_wins += 1;
@@ -48,7 +48,7 @@ public class Tournament
 
         game.start();
         game.run(p1, p2, budget);
-        System.out.println(p1.title() + " vs " + p2.title() + " -> " + game.getWinner() + "[" + game.getP1Score() + ", " + game.getP2Score() + "]");
+        System.out.println(p1.title() + " vs " + p2.title() + " -> " + game.getWinner() + " [" + game.getP1Score() + ", " + game.getP2Score() + "]");
         return game.getWinner();
     }
 }

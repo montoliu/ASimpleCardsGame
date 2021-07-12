@@ -87,7 +87,7 @@ public class MCTSNode
     public boolean hasChildren() { return children.size() > 0; }
     public boolean unvisited()   { return visits == 0;         }
     public boolean isTerminal()  { return gs.isTerminal();     }
-    public boolean anyActionPointsLeft() { return gs.getActionPointsLeft() > 0; }
+    public boolean noActionPointsLeft() { return gs.getActionPointsLeft() == 0; }
 
     public void extend()
     {

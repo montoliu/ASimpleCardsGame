@@ -20,7 +20,6 @@ public class GreedyPlayer implements Player
         if (actions.size() == 0) return null;
 
         Heuristic           h  = new SimpleHeuristic();
-        SimpleForwardModel fm = new SimpleForwardModel();
 
         double best_score = Integer.MIN_VALUE;
         double score;
