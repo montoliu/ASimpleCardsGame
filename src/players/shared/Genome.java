@@ -9,82 +9,87 @@ import java.util.List;
 import java.util.Random;
 
 
-public class Genome implements Comparable<Genome> {
-
-
-    public static Random random;
+public class Genome implements Comparable<Genome>
+{
+    public static Random rnd = new Random(); //TODO: is this recreating for every new genome? will it override the value I set it to with setRandom?
     public List<Action> actions;
     public double fitness;
 
     public ForwardModel forwardModel;
 
-    public Genome(ForwardModel forwardModel) {
+    public Genome(ForwardModel forwardModel)
+    {
         super();
         this.forwardModel = forwardModel;
         actions = new ArrayList<>();
-        random = new Random();
     }
 
-    public void random(GameState state) {
+    public void random(GameState state)
+    {
         List<Action> possible;
         actions.clear();
         fitness = 0;
         final boolean p1Turn = state.isP1Turn();
-        while (!state.isTerminal() && p1Turn == state.isP1Turn() && actions.size()<3) { //TODO: remove the size limit after fixing ForwardModel to take action points into account
+        while (!state.isTerminal() && p1Turn == state.isP1Turn() && state.getActionPointsLeft()>0)
+        {
             possible = state.getPossibleActions();  //TODO: change to not regenerate list when implemented
-            if (p1Turn == state.isP1Turn() && possible.isEmpty()) {
+            if (possible.isEmpty())
                 break;
-            }
 
-            final int idx = random.nextInt(possible.size());
+            final int idx = rnd.nextInt(possible.size());
             actions.add(possible.get(idx));
             forwardModel.step(state, possible.get(idx));
         }
     }
 
-    public void crossover(Genome a, Genome b, GameState state) {
+    public void crossover(Genome a, Genome b, GameState state)
+    {
         actions.clear();
         fitness = 0;
         List<Action> possible;
-        for (int i = 0; i < Math.max(a.actions.size(), b.actions.size()); i++) {
+        for (int i = 0; i < Math.max(a.actions.size(), b.actions.size()); i++)
+        {
             possible = state.getPossibleActions();  //TODO: change to not regenerate list when implemented
-            if (possible.isEmpty()){
+            if (possible.isEmpty())
                 break;
+
+            boolean useA = rnd.nextBoolean();
+
+            if (useA)
+            {
+                if (hasAction(a, possible, i))
+                    actions.add(a.actions.get(i));
+                else if (hasAction(b, possible, i))
+                    actions.add(b.actions.get(i));
             }
-            if (random.nextBoolean() && hasAction(a, possible, i))
-                actions.add(a.actions.get(i));
-            else if (hasAction(b, possible, i))
-                actions.add(b.actions.get(i));
-            else if (hasAction(a, possible, i))
-                actions.add(a.actions.get(i));
-            else {
-                if (hasAction(a, possible, i+1))
-                    actions.add(a.actions.get(i+1));
-                else if (hasAction(b, possible, i+1))
-                    actions.add(b.actions.get(i+1));
-                else
-                    actions.add(possible.get(random.nextInt(possible.size())));
+            else
+            {
+                if (hasAction(b, possible, i))
+                    actions.add(b.actions.get(i));
+                else if (hasAction(a, possible, i))
+                    actions.add(a.actions.get(i));
             }
+
+            if (actions.size() <= i)
+                    actions.add(possible.get(rnd.nextInt(possible.size())));
 
             forwardModel.step(state, actions.get(i));
         }
     }
 
-    private boolean hasAction(Genome genome, List<Action> possible, int index) {
+    private boolean hasAction(Genome genome, List<Action> possible, int index)
+    {
         if (genome.actions.size() <= index)
             return false;
 
-        if (possible.contains(genome.actions.get(index)))
-            return true;
-
-        return false;
+        return possible.contains(genome.actions.get(index));
     }
 
     public void mutate(GameState state) {
         if (actions.isEmpty())
             return;
 
-        final int mutIdx = random.nextInt(actions.size());
+        final int mutIdx = rnd.nextInt(actions.size());
         List<Action> possible;
         int i = 0;
         for (final Action action : actions) {
@@ -110,28 +115,14 @@ public class Genome implements Comparable<Genome> {
         if (possibleActions.isEmpty())
             return null;
 
-        final int idx = random.nextInt(possibleActions.size());
+        final int idx = rnd.nextInt(possibleActions.size());
 
         return possibleActions.get(idx);
     }
 
     @Override
     public int compareTo(Genome other) {
-        if (fitness == other.fitness)
-            return 0;
-        if (fitness > other.fitness)
-            return -1;
-        return 1;
-    }
-
-    public boolean isLegal(GameState clone) {
-        for (final Action action : actions) {
-            List<Action> possible = clone.getPossibleActions();
-            if (!possible.contains(action))
-                return false;
-            forwardModel.step(clone, action);
-        }
-        return true;
+        return Double.compare(other.fitness, fitness);
     }
 
     @Override

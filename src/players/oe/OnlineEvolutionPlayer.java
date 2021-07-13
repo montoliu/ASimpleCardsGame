@@ -1,10 +1,11 @@
-package players;
+package players.oe;
 
 import actions.Action;
 import game.GameState;
 import heuristics.Heuristic;
+import players.Player;
 import players.shared.Genome;
-import rules.SimpleForwardModel;
+import rules.ForwardModel;
 import java.util.*;
 
 public class OnlineEvolutionPlayer implements Player {
@@ -15,10 +16,10 @@ public class OnlineEvolutionPlayer implements Player {
     public double mutRate;
 
     public Heuristic heuristicEvaluator;
-    public SimpleForwardModel forwardModel; //TODO: change to interface when it's working
+    public ForwardModel forwardModel;
 
     public List<Action> actions;
-    public final List<Genome> pop;
+    public final List<Genome> population;
 
     private Random random;
 
@@ -30,10 +31,8 @@ public class OnlineEvolutionPlayer implements Player {
         this.heuristicEvaluator = heuristicEvaluator;
         this.killRate = killRate;
         actions = new ArrayList<>();
-        pop = new ArrayList<>();
+        population = new ArrayList<>();
         random = new Random();
-
-        forwardModel = new SimpleForwardModel(); //TODO: addSetFowardModel to Player and set it from game?
     }
 
     @Override
@@ -48,29 +47,29 @@ public class OnlineEvolutionPlayer implements Player {
 
     public void search(GameState state) {
 
-        long start = System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
 
         final List<Genome> killed = new ArrayList<>();
         GameState stateClone;
 
-        pop.clear();
+        population.clear();
 
+        //Generate a random starting population
         for (int i = 0; i < popSize; i++) {
             stateClone = state.deepCopy(); //TODO: change to copyFrom when implemented
             final Genome genome = new Genome(forwardModel);
             genome.random(stateClone);
-            pop.add(genome);
+            population.add(genome);
         }
 
-        int g = 0;
+        int generationsCount = 0;
 
-        while (System.currentTimeMillis() < start + budget) {
-            g++;
+        while (System.currentTimeMillis() < startTime + budget) {
+            generationsCount++;
 
-            // Test pop
-            for (final Genome genome : pop) {
+            // Evaluate population
+            for (final Genome genome : population) {
                 stateClone = state.deepCopy(); //TODO: change to copyFrom when implemented
-                //System.out.println("Gen " + g + ": " + genome.actions  + stateClone + "\n\n");
                 for (Action action : genome.actions)
                     if (action != null)
                         forwardModel.step(stateClone, action);
@@ -78,11 +77,11 @@ public class OnlineEvolutionPlayer implements Player {
             }
 
             // Kill worst genomes
-            Collections.sort(pop);
+            Collections.sort(population);
             killed.clear();
-            final int idx = (int) Math.floor(pop.size() * killRate);
-            for (int i = idx; i < pop.size(); i++)
-                killed.add(pop.get(i));
+            final int idx = (int) Math.floor(population.size() * killRate);
+            for (int i = idx; i < population.size(); i++)
+                killed.add(population.get(i));
 
             // Crossover new ones
             for (Genome killedGenome : killed) {
@@ -92,7 +91,7 @@ public class OnlineEvolutionPlayer implements Player {
                     b = random.nextInt(idx);
 
                 stateClone = state.deepCopy(); //TODO: change to copyFrom when implemented
-                killedGenome.crossover(pop.get(a), pop.get(b), stateClone);
+                killedGenome.crossover(population.get(a), population.get(b), stateClone);
 
                 // Mutation
                 if (Math.random() < mutRate) {
@@ -102,9 +101,9 @@ public class OnlineEvolutionPlayer implements Player {
             }
         }
 
-        //System.out.println(title() + "-> Generations: " + g + ", best fitness: " + pop.get(0).fitness);
+        //System.out.println(title() + "-> Generations: " + generationsCount + ", best fitness: " + population.get(0).fitness);
 
-        actions = pop.get(0).actions;
+        actions = population.get(0).actions;
     }
 
     @Override
@@ -115,6 +114,11 @@ public class OnlineEvolutionPlayer implements Player {
     @Override
     public void setSeed(int seed) {
         random = new Random(seed);
-        Genome.random = new Random(random.nextLong());
+        Genome.rnd = new Random(random.nextLong());
+    }
+
+    @Override
+    public void setForwardModel(ForwardModel fm) {
+        forwardModel = fm;
     }
 }
