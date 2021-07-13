@@ -11,6 +11,8 @@ public class SimpleForwardModel implements ForwardModel
     @Override
     public boolean step(GameState gs, Action a)
     {
+        gs.decrementActionPointsLeft();
+
         CardCollection h;
         if (gs.getTurn() == 1) h = gs.getP1Hand();
         else                   h = gs.getP2Hand();
@@ -55,7 +57,6 @@ public class SimpleForwardModel implements ForwardModel
             h.remove(a.GetPlayerCardId());
         }
 
-        gs.decrementActionPointsLeft();
         return true;
     }
 }

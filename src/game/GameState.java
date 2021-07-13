@@ -63,7 +63,7 @@ public class GameState
 
     private void createMainDeck()
     {
-        int id = 1;
+        int id = 0;
 
         // Number cards
         for (int n = gp.min_number; n <= gp.max_number; n++)
@@ -153,7 +153,7 @@ public class GameState
     public void resetFactor()               { factor = 1.0; }
 
     // TODO: Repensar
-    public boolean isTerminal()  { return p2_hand.isEmpty() || board.isEmpty(); }
+    public boolean isTerminal()  { return p1_hand.isEmpty() || p2_hand.isEmpty() || board.isEmpty(); }
     public boolean isP1Turn()    { return turn == 1;                            }
 
 
