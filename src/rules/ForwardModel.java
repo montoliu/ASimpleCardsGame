@@ -5,5 +5,5 @@ import game.GameState;
 
 public interface ForwardModel
 {
-    void step(GameState gs, Action a);
+    boolean step(GameState gs, Action a);
 }

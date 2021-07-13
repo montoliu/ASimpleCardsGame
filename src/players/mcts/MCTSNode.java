@@ -41,7 +41,7 @@ public class MCTSNode
     public void   addChild(MCTSNode child)  { children.add(child);            }
     public Action getAction()               { return action;                  }
 
-    public MCTSNode getBestChildScore()
+    public MCTSNode getBestChildMeanScore()
     {
         double  best_mean   = Integer.MIN_VALUE;
         MCTSNode best_child = null;
@@ -87,6 +87,7 @@ public class MCTSNode
     public boolean hasChildren() { return children.size() > 0; }
     public boolean unvisited()   { return visits == 0;         }
     public boolean isTerminal()  { return gs.isTerminal();     }
+    public boolean noActionPointsLeft() { return gs.getActionPointsLeft() == 0; }
 
     public void extend()
     {

@@ -1,5 +1,8 @@
 package game;
 
+import rules.ForwardModel;
+import rules.SimpleForwardModel;
+
 public class GameParameters
 {
     public int number_cards_on_hand;
@@ -11,6 +14,9 @@ public class GameParameters
     public int number_cards_normal_number;
     public int number_cards_mult2;
     public int number_cards_div2;
+    public int seed;
+
+    public ForwardModel fm;
 
     public GameParameters ()
     {
@@ -23,5 +29,9 @@ public class GameParameters
         number_cards_normal_number = 6;
         number_cards_mult2         = 4;
         number_cards_div2          = 4;
+
+        seed                       = -1;
+
+        fm = new SimpleForwardModel();
     }
 }

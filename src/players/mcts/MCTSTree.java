@@ -45,11 +45,11 @@ public class MCTSTree
         // main loop
         MCTSNode actual_node = root;
         int i=0;
-        while (i<100000)  // TODO AQUI tendria que ser por budget
+        while (i<10000)  // TODO AQUI tendria que ser por budget
         {
             MCTSNode best_child = actual_node.getBestChildUcb();   // get actual_node child according to ucb
 
-            if (best_child.unvisited() || best_child.isTerminal())
+            if (best_child.unvisited() || best_child.isTerminal() || best_child.noActionPointsLeft())
             {
                 // not yet visited (or terminal) -> rollout and backpropagate score
                 double score = best_child.rollout();
@@ -81,7 +81,7 @@ public class MCTSTree
         MCTSNode actual_node = root;
         for (int ap=0; ap<n_aps; ap++)
         {
-            MCTSNode best_child = actual_node.getBestChildScore();
+            MCTSNode best_child = actual_node.getBestChildMeanScore();
             turn.add(best_child.getAction());
             actual_node = best_child;
         }
