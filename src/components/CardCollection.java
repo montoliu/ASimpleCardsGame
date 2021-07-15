@@ -15,6 +15,7 @@ public class CardCollection
     public Card       getCard(int id)    { return cards.get(id);                   }
     public boolean    isEmpty()          { return cards.isEmpty();                 }
     public int        getNumberOfCards() { return cards.size();                    }
+    public int        getSize()          { return cards.size();                    }
 
     public void addAll(CardCollection cc)
     {

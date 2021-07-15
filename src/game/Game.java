@@ -44,6 +44,8 @@ public class Game
                 step(a);
             }
 
+            fm.drawCardsToHand(gs);
+
             nextPlayerTurn();
             if (notFinished())
             {
@@ -55,6 +57,8 @@ public class Game
                     step(a);
                 }
             }
+            fm.drawCardsToHand(gs);
+
             nextPlayerTurn();
         }
     }

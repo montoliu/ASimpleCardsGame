@@ -6,4 +6,5 @@ import game.GameState;
 public interface ForwardModel
 {
     boolean step(GameState gs, Action a);
+    void drawCardsToHand(GameState gs);
 }

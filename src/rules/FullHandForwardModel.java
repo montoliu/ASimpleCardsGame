@@ -3,11 +3,13 @@ package rules;
 import actions.Action;
 import components.Card;
 import components.CardCollection;
+import components.Deck;
 import game.GameState;
 
-public class SimpleForwardModel implements ForwardModel
+import java.util.List;
+
+public class FullHandForwardModel implements ForwardModel
 {
-    // Actualize the game state gs playing action a
     @Override
     public boolean step(GameState gs, Action a)
     {
@@ -64,16 +66,10 @@ public class SimpleForwardModel implements ForwardModel
         }
 
         // check if terminal
-        if (gs.getP2Hand().isEmpty() || gs.getBoard().isEmpty())
+        if (gs.getBoard().isEmpty())
             gs.setToTerminal();
 
         return true;
-    }
-
-    @Override
-    public void drawCardsToHand(GameState gs)
-    {
-        // In this set of rules no cards are drawn after player turn
     }
 
     void assignMinPossibleScore(GameState gs, int player)
@@ -83,5 +79,26 @@ public class SimpleForwardModel implements ForwardModel
         if (player == 1)  gs.addP1Score(min_possible_score);
         else              gs.addP2Score(min_possible_score);
 
+    }
+
+    @Override
+    public void drawCardsToHand(GameState gs)
+    {
+        // In this set of rules cards are drawn after player turn.
+        CardCollection hand      = gs.getP1Hand();
+        Deck           main_deck = gs.getMainDeck();
+
+        for (int i=0; i<gs.getGameParameters().number_cards_on_hand - hand.getSize(); i++)
+        {
+            if (main_deck.isEmpty())
+            {
+                Deck discard_deck = gs.getDiscardDeck();
+                List<Card> cards = discard_deck.popAll();
+                main_deck.addAll(cards);
+                main_deck.shuffle();
+            }
+            Card c = main_deck.pop();
+            hand.add(c);
+        }
     }
 }

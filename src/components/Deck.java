@@ -63,6 +63,17 @@ public class Deck
         return c;
     }
 
+    public List<Card> popAll()
+    {
+        List<Card> l = new ArrayList<>();
+        while (!cards.isEmpty())
+        {
+            Card c = pop();
+            l.add(c);
+        }
+        return l;
+    }
+
     public void shuffle()
     {
         Random r;

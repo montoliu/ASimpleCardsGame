@@ -21,6 +21,8 @@ public class GameState
     double factor;
     int    action_points_left;
 
+    boolean is_terminal;
+
     public GameState() {}
 
     public GameState(GameParameters gp)
@@ -48,6 +50,8 @@ public class GameState
         factor   = 1.0;
 
         action_points_left = gp.number_of_action_points;
+
+        is_terminal = false;
 
         createMainDeck();
         drawCards();
@@ -152,9 +156,10 @@ public class GameState
     public void updateFactor(double factor) { this.factor = this.factor * factor; }
     public void resetFactor()               { factor = 1.0; }
 
-    // TODO: Repensar
-    public boolean isTerminal()  { return p1_hand.isEmpty() || p2_hand.isEmpty() || board.isEmpty(); }
-    public boolean isP1Turn()    { return turn == 1;                            }
+    public boolean isTerminal()  { return is_terminal; }
+    public boolean isP1Turn()    { return turn == 1;   }
+
+    public void setToTerminal()  { is_terminal = true; }
 
 
     public GameState getObservation()

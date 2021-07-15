@@ -19,8 +19,8 @@ public class League
     public static void main(String[] args)
     {
         GameParameters gp      = new GameParameters();
-        int            budget  = 1000;
-        int            n_games = 10;
+        int            budget  = 500;
+        int            n_games = 100;
 
         // Players
         Player pl1 = new RandomPlayer();
