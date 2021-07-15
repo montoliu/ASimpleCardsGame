@@ -25,4 +25,9 @@ public class Action
     {
         return "Action [" + played_card_id + " " + on_played_card_id + "]";
     }
+
+    @Override
+    public int hashCode() {
+        return played_card_id * 1000 + on_played_card_id;
+    }
 }
