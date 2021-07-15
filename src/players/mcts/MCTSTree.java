@@ -19,6 +19,8 @@ public class MCTSTree
 
     public List<Action> getBestTurn(GameState gs, int budget)
     {
+        long startTime = System.currentTimeMillis();
+
         root = new MCTSNode(gs, null,null);
         root.setSeed(seed);
 
@@ -45,7 +47,7 @@ public class MCTSTree
         // main loop
         MCTSNode actual_node = root;
         int i=0;
-        while (i<10000)  // TODO AQUI tendria que ser por budget
+        while (System.currentTimeMillis() < startTime + budget)
         {
             MCTSNode best_child = actual_node.getBestChildUcb();   // get actual_node child according to ucb
 

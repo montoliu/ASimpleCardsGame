@@ -22,13 +22,19 @@ public class SimpleForwardModel implements ForwardModel
         Card card_to_play = h.getCard(a.GetPlayerCardId());
 
         if (card_to_play==null)
+        {
+            assignMinPossibleScore(gs, gs.getTurn());
             return false;
+        }
 
         if (a.GetOnPlayerCardId() != -1)
         {
             Card card_on_play = b.getCard(a.GetOnPlayerCardId());
             if (card_on_play==null)
+            {
+                assignMinPossibleScore(gs, gs.getTurn());
                 return false;
+            }
 
             int    n1    = card_to_play.getNumber();
             int    n2    = card_on_play.getNumber();
@@ -58,5 +64,14 @@ public class SimpleForwardModel implements ForwardModel
         }
 
         return true;
+    }
+
+    void assignMinPossibleScore(GameState gs, int player)
+    {
+        double min_possible_score = Math.pow(2.0, gs.getGameParameters().number_of_action_points-1) *
+                (gs.getGameParameters().min_number - gs.getGameParameters().max_number);
+        if (player == 1)  gs.addP1Score(min_possible_score);
+        else              gs.addP2Score(min_possible_score);
+
     }
 }
