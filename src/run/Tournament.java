@@ -8,6 +8,7 @@ import players.GreedyPlayer;
 import players.MCTSPlayer;
 import players.Player;
 import players.RandomPlayer;
+import players.ntbea.OnlineNTBEAGenomeBased;
 import players.oe.OnlineEvolutionPlayer;
 import players.oe.OnlineEvolutionPlayerUseIllegal;
 
@@ -18,12 +19,12 @@ public class Tournament
     public static void main(String[] args)
     {
         GameParameters gp      = new GameParameters();
-        int            budget  = 3000;
-        int            n_games = 500;
+        int            budget  = 1000;
+        int            n_games = 200;
 
         //gp.seed = 1;
 
-        Player p1 = new OnlineEvolutionPlayerUseIllegal(100, 0.1, 0.5, budget, new SimpleHeuristic());
+        Player p1 = new OnlineNTBEAGenomeBased(budget, 100, 10, 0.01, true, true, false, false, false, true, new SimpleHeuristic());
         Player p2 = new OnlineEvolutionPlayer(100, 0.1, 0.5, budget, new SimpleHeuristic());
 
         int p1_wins = 0;
