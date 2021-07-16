@@ -61,9 +61,10 @@ public class OnlineEvolutionPlayerUseIllegal implements Player {
 
         //Generate a random starting population
         for (int i = 0; i < popSize; i++) {
+            stateClone = state.deepCopy(); //TODO: change to copyFrom when implemented
             final GenomeUseIllegal genome = new GenomeUseIllegal(state.getNumberActionPoints(), state.getMainDeck().getCards().size() +
                     state.getDiscardDeck().getCards().size() + state.getP1Hand().getNumberOfCards() + state.getP2Hand().getNumberOfCards() + state.getBoard().getNumberOfCards());
-            genome.random();
+            genome.randomLegal(stateClone, forwardModel);
             population.add(genome);
         }
 

@@ -2,6 +2,7 @@ package players.shared;
 
 import actions.Action;
 import game.GameState;
+import rules.ForwardModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,12 +26,22 @@ public class GenomeUseIllegal implements Comparable<GenomeUseIllegal>
         this.numberOfCards = numberOfCards;
     }
 
-    public void random()
+    public void randomLegal(GameState gs, ForwardModel fm)
     {
+        List<Action> possible;
         actions.clear();
         fitness = 0;
-        for (int i = 0; i < actionsLength; i++)
-            actions.add(new Action(rnd.nextInt(numberOfCards), rnd.nextInt(numberOfCards)));
+        final boolean p1Turn = gs.isP1Turn();
+        while (!gs.isTerminal() && p1Turn == gs.isP1Turn() && gs.getActionPointsLeft()>0)
+        {
+            possible = gs.getPossibleActions();  //TODO: change to not regenerate list when implemented
+            if (possible.isEmpty())
+                break;
+
+            final int idx = rnd.nextInt(possible.size());
+            actions.add(possible.get(idx));
+            fm.step(gs, possible.get(idx));
+        }
     }
 
     public void crossover(GenomeUseIllegal a, GenomeUseIllegal b)
@@ -70,4 +81,5 @@ public class GenomeUseIllegal implements Comparable<GenomeUseIllegal>
             actions = new ArrayList<>(other.actions);
         fitness = other.fitness;
     }
+
 }
