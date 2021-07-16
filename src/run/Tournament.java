@@ -20,7 +20,7 @@ public class Tournament
     {
         GameParameters gp      = new GameParameters();
         int            budget  = 1000;
-        int            n_games = 200;
+        int            n_games = 50;
 
         //gp.seed = 1;
 

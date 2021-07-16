@@ -2,22 +2,34 @@ package run;
 
 import game.Game;
 import game.GameParameters;
+import heuristics.SimpleHeuristic;
 import players.GreedyPlayer;
+import players.HumanPlayer;
 import players.MCTSPlayer;
 import players.Player;
+import players.ntbea.OnlineNTBEAGenomeBased;
+import players.oe.OnlineEvolutionPlayer;
+import players.oe.OnlineEvolutionPlayerUseIllegal;
 
 public class PlayOneGame
 {
     public static void main(String[] args)
     {
-        GameParameters gp     = new GameParameters();
-        //gp.seed = 2;
+        GameParameters gp = new GameParameters();
+        gp.seed           = 1;
 
         Game game   = new Game(gp);
         int  budget = 1000;
 
-        Player p1 = new GreedyPlayer();
-        Player p2 = new MCTSPlayer(budget);
+        Player p1 = new HumanPlayer();
+        Player p2 = new HumanPlayer();
+
+        //Player p2 = new GreedyPlayer();
+        //Player p2 = new MCTSPlayer(budget);
+        //Player p2 = new OnlineNTBEAGenomeBased(budget, 100, 1.0, 0.01, true, true, true, false, false, false, new SimpleHeuristic());
+        //Player p2 = new OnlineEvolutionPlayerUseIllegal(100, 0.1, 0.5, budget, new SimpleHeuristic());
+        //Player p2 = new OnlineEvolutionPlayer(100, 0.1, 0.5, budget, new SimpleHeuristic());
+        //Player p2 = new OnlineNTBEAGenomeBased(budget, 100, 10, 0.01, true, true, false, false, false, true, new SimpleHeuristic());
 
         game.start();
         game.run(p1, p2, budget);

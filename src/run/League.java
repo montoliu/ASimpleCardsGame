@@ -7,6 +7,7 @@ import players.GreedyPlayer;
 import players.MCTSPlayer;
 import players.Player;
 import players.RandomPlayer;
+import players.ntbea.OnlineNTBEAGenomeBased;
 import players.oe.OnlineEvolutionPlayer;
 import players.oe.OnlineEvolutionPlayerUseIllegal;
 
@@ -19,7 +20,7 @@ public class League
     public static void main(String[] args)
     {
         GameParameters gp      = new GameParameters();
-        int            budget  = 500;
+        int            budget  = 1000;
         int            n_games = 100;
 
         // Players
@@ -28,15 +29,17 @@ public class League
         Player pl3 = new MCTSPlayer(budget);
         Player pl4 = new OnlineEvolutionPlayerUseIllegal(100, 0.1, 0.5, budget, new SimpleHeuristic());
         Player pl5 = new OnlineEvolutionPlayer(100, 0.1, 0.5, budget, new SimpleHeuristic());
+        Player pl6 = new OnlineNTBEAGenomeBased(budget, 100, 10, 0.01, true, true, false, false, false, true, new SimpleHeuristic());
 
         List<Player>             players = new ArrayList<>();
         HashMap<Integer, Double> points  = new HashMap<Integer, Double>();
 
-        players.add(pl1);   points.put(1, 0.0);
-        players.add(pl2);   points.put(2, 0.0);
-        players.add(pl3);   points.put(3, 0.0);
-        players.add(pl4);   points.put(4, 0.0);
-        players.add(pl5);   points.put(5, 0.0);
+        players.add(pl6);   points.put(1, 0.0);
+        players.add(pl1);   points.put(2, 0.0);
+        players.add(pl2);   points.put(3, 0.0);
+        players.add(pl3);   points.put(4, 0.0);
+        players.add(pl4);   points.put(5, 0.0);
+        players.add(pl5);   points.put(6, 0.0);
 
         int p1_idx = 1;
         for (Player p1 : players)

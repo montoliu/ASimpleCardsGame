@@ -284,6 +284,7 @@ public class GameState
                 "\nP1 score    : " + getP1Score()       +
                 "\nP2 score    : " + getP2Score()       +
                 "\nAP left     : " + action_points_left +
+                "\nFactor      : " + factor             +
                 "\nP1 Hand     : " + p1_hand            +
                 "\nP2 Hand     : " + p2_hand            +
                 "\nBoard       : " + board              +
