@@ -34,12 +34,12 @@ public class League
         List<Player>             players = new ArrayList<>();
         HashMap<Integer, Double> points  = new HashMap<Integer, Double>();
 
-        players.add(pl6);   points.put(1, 0.0);
-        players.add(pl1);   points.put(2, 0.0);
-        players.add(pl2);   points.put(3, 0.0);
-        players.add(pl3);   points.put(4, 0.0);
-        players.add(pl4);   points.put(5, 0.0);
-        players.add(pl5);   points.put(6, 0.0);
+        players.add(pl1);   points.put(1, 0.0);
+        players.add(pl2);   points.put(2, 0.0);
+        players.add(pl3);   points.put(3, 0.0);
+        players.add(pl4);   points.put(4, 0.0);
+        players.add(pl5);   points.put(5, 0.0);
+        players.add(pl6);   points.put(6, 0.0);
 
         int p1_idx = 1;
         for (Player p1 : players)
