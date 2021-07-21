@@ -62,13 +62,22 @@ public class OnlineEvolutionPlayer implements Player {
             population.add(genome);
         }
 
+        // Evaluate the initial population
+        for (final Genome genome : population) {
+            stateClone = state.deepCopy(); //TODO: change to copyFrom when implemented
+            for (Action action : genome.actions)
+                if (action != null)
+                    forwardModel.step(stateClone, action);
+            genome.fitness = heuristicEvaluator.getScore(stateClone);
+        }
+
         int generationsCount = 0;
 
         while (System.currentTimeMillis() < startTime + budget) {
             generationsCount++;
 
-            // Evaluate population
-            for (final Genome genome : population) {
+            // Evaluate the newly introduced genomes
+            for (final Genome genome : killed) {
                 stateClone = state.deepCopy(); //TODO: change to copyFrom when implemented
                 for (Action action : genome.actions)
                     if (action != null)
@@ -94,7 +103,7 @@ public class OnlineEvolutionPlayer implements Player {
                 killedGenome.crossover(population.get(a), population.get(b), stateClone);
 
                 // Mutation
-                if (Math.random() < mutRate) {   // TODO cambiar el random
+                if (random.nextDouble() < mutRate) {
                     stateClone = state.deepCopy(); //TODO: change to copyFrom when implemented
                     killedGenome.mutate(stateClone);
                 }
