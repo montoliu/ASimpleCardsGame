@@ -3,10 +3,7 @@ package run;
 import game.Game;
 import game.GameParameters;
 import heuristics.SimpleHeuristic;
-import players.GreedyPlayer;
-import players.HumanPlayer;
-import players.MCTSPlayer;
-import players.Player;
+import players.*;
 import players.ntbea.OnlineNTBEAGenomeBased;
 import players.oe.OnlineEvolutionPlayer;
 import players.oe.OnlineEvolutionPlayerUseIllegal;
@@ -21,18 +18,20 @@ public class PlayOneGame
         Game game   = new Game(gp);
         int  budget = 1000;
 
-        Player p1 = new HumanPlayer();
-        Player p2 = new HumanPlayer();
+        Player p1 = new OnlineEvolutionPlayer(100, 0.1, 0.5, budget, new SimpleHeuristic());
+        Player p2 = new GreedyPlayer();
 
+        //Player p2 = new HumanPlayer();
+        //Player p2 = new RandomPlayer();
         //Player p2 = new GreedyPlayer();
-        //Player p2 = new MCTSPlayer(budget);
+        //Player p2 = new MCTSPlayer(1.4, budget);
         //Player p2 = new OnlineNTBEAGenomeBased(budget, 100, 1.0, 0.01, true, true, true, false, false, false, new SimpleHeuristic());
         //Player p2 = new OnlineEvolutionPlayerUseIllegal(100, 0.1, 0.5, budget, new SimpleHeuristic());
         //Player p2 = new OnlineEvolutionPlayer(100, 0.1, 0.5, budget, new SimpleHeuristic());
-        //Player p2 = new OnlineNTBEAGenomeBased(budget, 100, 10, 0.01, true, true, false, false, false, true, new SimpleHeuristic());
 
         game.start();
+        game.setVerboseOn();
         game.run(p1, p2, budget);
-        System.out.println(p1.title() + " vs " + p2.title() + " : " + game.getWinner() + " -> Score: " + game.getP1Score() + " , " + game.getP2Score());
+        System.out.println(p1.title() + " vs " + p2.title() + " : " + game.getWinner() + " -> Score: " + game.getP1Score() + " " + game.getP2Score());
     }
 }

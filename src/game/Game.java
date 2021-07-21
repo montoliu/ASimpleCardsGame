@@ -3,7 +3,6 @@ package game;
 import actions.Action;
 import players.Player;
 import rules.ForwardModel;
-import rules.SimpleForwardModel;
 
 public class Game
 {
@@ -11,12 +10,14 @@ public class Game
     private final GameParameters gp;
     private final ForwardModel   fm;
     int           seed;
+    boolean       verbose;
 
     public Game(GameParameters gp)
     {
         this.gp   = gp;
         this.seed = gp.seed;
         this.fm   = gp.fm;
+        this.verbose = false;
     }
 
     public void start()
@@ -25,6 +26,8 @@ public class Game
         gs.setSeed(seed);
         gs.initialize();
     }
+
+    public void setVerboseOn() { verbose = true; }
 
     public void run(Player p1, Player p2, int budget)
     {
@@ -40,10 +43,12 @@ public class Game
             while (gs.getActionPointsLeft() > 0)
             {
                 Action a = p1.act(getObservation(), budget);
+                if (verbose) System.out.print("Player: " + gs.getTurn() + ", AP: " + gs.getActionPointsLeft() + " -> " + a);
                 if (a == null) break;
                 step(a);
+                if (verbose) System.out.println(", Score: " + gs.getP1Score() + " " + gs.getP2Score());
             }
-
+            if (verbose) System.out.println("---");
             fm.drawCardsToHand(gs);
 
             nextPlayerTurn();
@@ -53,10 +58,14 @@ public class Game
                 while (gs.getActionPointsLeft() > 0)
                 {
                     Action a = p2.act(getObservation(), budget);
+                    if (verbose) System.out.print("Player: " + gs.getTurn() + ", AP: " + gs.getActionPointsLeft() + " -> " + a);
                     if (a == null) break;
                     step(a);
+
+                    if (verbose) System.out.println(", Score: " + gs.getP1Score() + " " + gs.getP2Score());
                 }
             }
+            if (verbose) System.out.println("---");
             fm.drawCardsToHand(gs);
 
             nextPlayerTurn();

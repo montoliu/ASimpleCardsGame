@@ -94,7 +94,7 @@ public class OnlineEvolutionPlayer implements Player {
                 killedGenome.crossover(population.get(a), population.get(b), stateClone);
 
                 // Mutation
-                if (Math.random() < mutRate) {
+                if (Math.random() < mutRate) {   // TODO cambiar el random
                     stateClone = state.deepCopy(); //TODO: change to copyFrom when implemented
                     killedGenome.mutate(stateClone);
                 }

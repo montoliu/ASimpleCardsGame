@@ -14,12 +14,14 @@ public class MCTSPlayer implements Player
     int          budget;
     List<Action> turn;
     ForwardModel fm;
+    double       C;
 
-    public MCTSPlayer(int budget)
+    public MCTSPlayer(double C, int budget)
     {
-        seed = -1;
-        turn = new ArrayList<>();
+        this.seed   = -1;
+        this.turn   = new ArrayList<>();
         this.budget = budget;
+        this.C      = C;
     }
 
     @Override
@@ -34,7 +36,7 @@ public class MCTSPlayer implements Player
             MCTSTree tree = new MCTSTree();
             tree.setSeed(seed);
 
-            turn = tree.getBestTurn(gs, budget);
+            turn = tree.getBestTurn(gs, C, budget);
         }
         action = turn.get(0);
         turn.remove(0);

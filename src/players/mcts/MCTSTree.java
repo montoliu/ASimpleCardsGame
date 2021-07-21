@@ -17,7 +17,7 @@ public class MCTSTree
 
     public void setSeed (int seed) { this.seed = seed; }
 
-    public List<Action> getBestTurn(GameState gs, int budget)
+    public List<Action> getBestTurn(GameState gs, double C, int budget)
     {
         long startTime = System.currentTimeMillis();
 
@@ -49,7 +49,7 @@ public class MCTSTree
         int i=0;
         while (System.currentTimeMillis() < startTime + budget)
         {
-            MCTSNode best_child = actual_node.getBestChildUcb();   // get actual_node child according to ucb
+            MCTSNode best_child = actual_node.getBestChildUcb(C);   // get actual_node child according to ucb
 
             if (best_child.unvisited() || best_child.isTerminal() || best_child.noActionPointsLeft())
             {

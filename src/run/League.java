@@ -26,7 +26,7 @@ public class League
         // Players
         Player pl1 = new RandomPlayer();
         Player pl2 = new GreedyPlayer();
-        Player pl3 = new MCTSPlayer(budget);
+        Player pl3 = new MCTSPlayer(1.4, budget);
         Player pl4 = new OnlineEvolutionPlayerUseIllegal(100, 0.1, 0.5, budget, new SimpleHeuristic());
         Player pl5 = new OnlineEvolutionPlayer(100, 0.1, 0.5, budget, new SimpleHeuristic());
         Player pl6 = new OnlineNTBEAGenomeBased(budget, 100, 10, 0.01, true, true, false, false, false, true, new SimpleHeuristic());

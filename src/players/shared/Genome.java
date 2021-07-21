@@ -92,10 +92,12 @@ public class Genome implements Comparable<Genome>
         final int mutIdx = rnd.nextInt(actions.size());
         List<Action> possible;
         int i = 0;
-        for (final Action action : actions) {
+        for (final Action action : actions)
+        {
             if (i == mutIdx)
                 actions.set(mutIdx, newAction(state, action));
-            else if (i > mutIdx) {
+            else if (i > mutIdx)
+            {
                 possible = state.getPossibleActions();  //TODO: change to not regenerate list when implemented
                 if (!possible.contains(action))
                     if (actions.size() < i+1 && possible.contains(actions.get(i+1))) // Might never be activated
@@ -108,14 +110,18 @@ public class Genome implements Comparable<Genome>
         }
     }
 
-    private Action newAction(GameState state, Action action) {
+    // Return a random action (excluding the current) from the possible ones.
+    private Action newAction(GameState state, Action action)
+    {
         final List<Action> possibleActions = state.getPossibleActions();
-        possibleActions.remove(action);
-
-        if (possibleActions.isEmpty())
-            return null;
-
-        final int idx = rnd.nextInt(possibleActions.size());
+        int idx;
+        if (possibleActions.size() > 1)
+        {
+            possibleActions.remove(action);
+            idx = rnd.nextInt(possibleActions.size());
+        }
+        else
+            idx = 0;
 
         return possibleActions.get(idx);
     }

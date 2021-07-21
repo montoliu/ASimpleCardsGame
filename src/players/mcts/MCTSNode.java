@@ -11,7 +11,6 @@ import java.util.Random;
 
 public class MCTSNode
 {
-    double         C = 1.4;
     double         score;
     int            visits;
     GameState      gs;
@@ -57,7 +56,7 @@ public class MCTSNode
         return best_child;
     }
 
-    public MCTSNode getBestChildUcb()
+    public MCTSNode getBestChildUcb(double C)
     {
         double   best_ucb   = Integer.MIN_VALUE;
         MCTSNode best_child = null;
