@@ -68,18 +68,28 @@ public class OnlineEvolutionPlayerUseIllegal implements Player {
             population.add(genome);
         }
 
+        // Evaluate the initial population
+        for (final GenomeUseIllegal genome : population) {
+            stateClone = state.deepCopy(); //TODO: change to copyFrom when implemented
+            for (Action action : genome.actions)
+                if (action != null)
+                    forwardModel.step(stateClone, action);
+            genome.fitness = heuristicEvaluator.getScore(stateClone);
+        }
+
         int generationsCount = 0;
 
         while (System.currentTimeMillis() < startTime + budget) {
             generationsCount++;
 
             // Evaluate population
-            for (final GenomeUseIllegal genome : population) {
+            // Evaluate the newly introduced genomes
+            for (final GenomeUseIllegal genome : killed) {
                 stateClone = state.deepCopy(); //TODO: change to copyFrom when implemented
                 for (Action action : genome.actions)
                     if (action != null)
                         forwardModel.step(stateClone, action);
-                genome.fitness = heuristicEvaluator.getScore(stateClone);  //TODO: should we give -Inf value to invalid turns?
+                genome.fitness = heuristicEvaluator.getScore(stateClone);
             }
 
             // Kill worst genomes
@@ -99,7 +109,7 @@ public class OnlineEvolutionPlayerUseIllegal implements Player {
                 killedGenome.crossover(population.get(a), population.get(b));
 
                 // Mutation
-                if (Math.random() < mutRate) {
+                if (random.nextDouble() < mutRate) {
                     killedGenome.mutate();
                 }
             }
