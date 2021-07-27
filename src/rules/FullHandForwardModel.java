@@ -82,7 +82,7 @@ public class FullHandForwardModel implements ForwardModel
     }
 
     @Override
-    public void drawCardsToHand(GameState gs)
+    public void onPlayerTurnEnded(GameState gs)
     {
         // In this set of rules cards are drawn after player turn.
         CardCollection hand      = gs.getP1Hand();

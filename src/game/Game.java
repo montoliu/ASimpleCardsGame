@@ -49,7 +49,7 @@ public class Game
                 if (verbose) System.out.println(", Score: " + gs.getP1Score() + " " + gs.getP2Score());
             }
             if (verbose) System.out.println("---");
-            fm.drawCardsToHand(gs);
+            fm.onPlayerTurnEnded(gs);
 
             nextPlayerTurn();
             if (notFinished())
@@ -66,7 +66,7 @@ public class Game
                 }
             }
             if (verbose) System.out.println("---");
-            fm.drawCardsToHand(gs);
+            fm.onPlayerTurnEnded(gs);
 
             nextPlayerTurn();
         }

@@ -71,9 +71,9 @@ public class SimpleForwardModel implements ForwardModel
     }
 
     @Override
-    public void drawCardsToHand(GameState gs)
+    public void onPlayerTurnEnded(GameState gs)
     {
-        // In this set of rules no cards are drawn after player turn
+        // In this set of rules nothing is done after player turn
     }
 
     void assignMinPossibleScore(GameState gs, int player)
