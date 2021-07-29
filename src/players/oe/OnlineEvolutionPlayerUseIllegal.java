@@ -122,7 +122,7 @@ public class OnlineEvolutionPlayerUseIllegal implements Player {
 
     @Override
     public String title() {
-        return "Online Evolution Use Illegal";
+        return "Online Evolution Use Illegal" + killRate;
     }
 
     @Override

@@ -117,7 +117,7 @@ public class OnlineEvolutionPlayer implements Player {
 
     @Override
     public String title() {
-        return "Online Evolution";
+        return "Online Evolution" + killRate;
     }
 
     @Override

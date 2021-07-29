@@ -24,8 +24,8 @@ public class Tournament
 
         //gp.seed = 1;
 
-        Player p1 = new OnlineNTBEAGenomeBased(budget, 100, 10, 0.01, true, true, false, false, false, true, new SimpleHeuristic());
-        Player p2 = new OnlineEvolutionPlayer(100, 0.1, 0.5, budget, new SimpleHeuristic());
+        Player p1 = new RandomPlayer();
+        Player p2 = new GreedyPlayer();
 
         int p1_wins = 0;
         int p2_wins = 0;

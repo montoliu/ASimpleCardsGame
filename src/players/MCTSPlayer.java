@@ -53,7 +53,7 @@ public class MCTSPlayer implements Player
     @Override
     public String title()
     {
-        return "MCTSPlayer";
+        return "MCTSPlayer" + C;
     }
 
     @Override

@@ -23,41 +23,45 @@ public class League
     public static void main(String[] args) throws IOException
     {
         GameParameters gp      = new GameParameters();
-        int            budget  = 500;
-        int            n_games = 100;
+        int            budget  = 100;
+        int            n_games = 10;
         int            repetitions  = 10;
         String         outputFile = "testResults//Resultados_500(10x100).txt";
-
 
         // Players
         Player pl1 = new RandomPlayer();
         Player pl2 = new GreedyPlayer();
         Player pl3 = new MCTSPlayer(1.4, budget);
-        Player pl4 = new OnlineEvolutionPlayerUseIllegal(100, 0.1, 0.5, budget, new SimpleHeuristic());
-        Player pl5 = new OnlineEvolutionPlayer(100, 0.1, 0.5, budget, new SimpleHeuristic());
-        Player pl6 = new OnlineNTBEAGenomeBased(budget, 100, 10, 0.01, true, true, false, false, false, true, new SimpleHeuristic());
+        Player pl4 = new MCTSPlayer(7, budget);
+        Player pl5 = new MCTSPlayer(14, budget);
+
+        Player pl6 = new OnlineEvolutionPlayerUseIllegal(100, 0.1, 0.5, budget, new SimpleHeuristic());
+        Player pl7 = new OnlineEvolutionPlayerUseIllegal(100, 0.1, 0.25, budget, new SimpleHeuristic());
+        Player pl8 = new OnlineEvolutionPlayerUseIllegal(100, 0.1, 0.75, budget, new SimpleHeuristic());
+
+        Player pl9 = new OnlineEvolutionPlayer(100, 0.1, 0.25, budget, new SimpleHeuristic());
+        Player pl10 = new OnlineEvolutionPlayer(100, 0.1, 0.5, budget, new SimpleHeuristic());
+        Player pl11 = new OnlineEvolutionPlayer(100, 0.1, 0.75, budget, new SimpleHeuristic());
+
+        Player pl12 = new OnlineNTBEAGenomeBased(budget, 100, 1.4, 0.01, true, true, false, false, false, true, new SimpleHeuristic());
+        Player pl13 = new OnlineNTBEAGenomeBased(budget, 100, 1.4, 0.01, true, true, false, false, false, false, new SimpleHeuristic());
+        Player pl14 = new OnlineNTBEAGenomeBased(budget, 100, 1.4, 0.01, true, false, false, false, false, false, new SimpleHeuristic());
+
+        Player pl15 = new OnlineNTBEAGenomeBased(budget, 100, 7  , 0.01, true, true, false, false, false, true, new SimpleHeuristic());
+        Player pl16 = new OnlineNTBEAGenomeBased(budget, 100, 14 , 0.01, true, true, false, false, false, true, new SimpleHeuristic());
 
         List<Player>             players = new ArrayList<>();
-        HashMap<Integer, Double> points  = new HashMap<>();
 
-        players.add(pl1);
-        players.add(pl2);
-        players.add(pl3);
-        players.add(pl4);
-        players.add(pl5);
-        players.add(pl6);
+        players.add(pl1);  players.add(pl2);  players.add(pl3);  players.add(pl4);  players.add(pl5);
+        players.add(pl6);  players.add(pl7);  players.add(pl8);  players.add(pl9);  players.add(pl10);
+        players.add(pl11);  players.add(pl12);  players.add(pl13);  players.add(pl14);  players.add(pl15);
+        players.add(pl16);
+
 
         PrintWriter writer = new PrintWriter(outputFile, StandardCharsets.UTF_8);
 
         while (repetitions > 0)
         {
-            points.put(1, 0.0);
-            points.put(2, 0.0);
-            points.put(3, 0.0);
-            points.put(4, 0.0);
-            points.put(5, 0.0);
-            points.put(6, 0.0);
-
             int p1_idx = 1;
             for (Player p1 : players)
             {
@@ -66,13 +70,11 @@ public class League
                 {
                     if (p1 != p2)
                     {
-                        System.out.print(p1.title() + " vs " + p2.title());
-                        writer.print(p1.title() + " vs " + p2.title());
+                        System.out.print(repetitions + "," + p1.title() + "," + p2.title());
+                        writer.print(repetitions + "," + p1.title() + "," + p2.title());
                         List<Integer> results = playTournament(p1,p2,n_games, budget, gp);
-                        points.put(p1_idx, points.get(p1_idx) + results.get(0) +results.get(2) / 2.0 );
-                        points.put(p2_idx, points.get(p2_idx) + results.get(1) +results.get(2) / 2.0 );
-                        System.out.println(" -> " + results.get(0) + " " + results.get(1) + " " + results.get(2));
-                        writer.println(" -> " + results.get(0) + " " + results.get(1) + " " + results.get(2));
+                        System.out.println("," + results.get(0) + "," + results.get(1) + "," + results.get(2));
+                        writer.println("," + results.get(0) + "," + results.get(1) + "," + results.get(2));
                         writer.flush();
                     }
                     p2_idx += 1;
@@ -80,18 +82,7 @@ public class League
                 p1_idx += 1;
             }
 
-            System.out.println("\nResults: ");
-            writer.println("\nResults: ");
-            int idx = 1;
-            for (Player p :players)
-            {
-                System.out.println(p.title() + " -> " + points.get(idx));
-                writer.println(p.title() + " -> " + points.get(idx));
-                idx += 1;
-            }
             repetitions --;
-            System.out.println("\n----------------------------\n");
-            writer.println("\n----------------------------\n");
         }
         writer.close();
     }

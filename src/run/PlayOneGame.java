@@ -18,7 +18,7 @@ public class PlayOneGame
         Game game   = new Game(gp);
         int  budget = 1000;
 
-        Player p1 = new OnlineNTBEAGenomeBased(budget, 100, 1.0, 0.01, true, true, true, false, false, false, new SimpleHeuristic());
+        Player p1 = new RandomPlayer();
         Player p2 = new GreedyPlayer();
 
         //Player p2 = new HumanPlayer();
