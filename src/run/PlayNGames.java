@@ -1,20 +1,14 @@
 package run;
 
-import actions.Action;
 import game.Game;
 import game.GameParameters;
-import heuristics.SimpleHeuristic;
 import players.GreedyPlayer;
-import players.MCTSPlayer;
 import players.Player;
 import players.RandomPlayer;
-import players.ntbea.OnlineNTBEAGenomeBased;
-import players.oe.OnlineEvolutionPlayer;
-import players.oe.OnlineEvolutionPlayerUseIllegal;
 
-import java.lang.reflect.GenericArrayType;
 
-public class Tournament
+//Class that can be run to play n games and print their results
+public class PlayNGames
 {
     public static void main(String[] args)
     {
@@ -50,7 +44,7 @@ public class Tournament
     {
         Game game = new Game(gp);
 
-        game.start();
+        game.Setup();
         game.run(p1, p2, budget);
         System.out.println(p1.title() + " vs " + p2.title() + " -> " + game.getWinner() + " [" + game.getP1Score() + ", " + game.getP2Score() + "]");
         return game.getWinner();

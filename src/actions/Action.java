@@ -1,7 +1,5 @@
 package actions;
 
-import players.shared.Genome;
-
 public class Action
 {
     int played_card_id;

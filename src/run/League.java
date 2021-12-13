@@ -15,18 +15,18 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class League
 {
+    //Class that can be run to play an all vs all league with any number of players and print the results to a csv file
     public static void main(String[] args) throws IOException
     {
         GameParameters gp      = new GameParameters();
         int            budget  = 100;
         int            n_games = 10;
         int            repetitions  = 10;
-        String         outputFile = "testResults//Resultados_500(10x100).txt";
+        String         outputFile = "testResults//Results.csv";
 
         // Players
         Player pl1 = new RandomPlayer();
@@ -115,7 +115,7 @@ public class League
     {
         Game game = new Game(gp);
 
-        game.start();
+        game.Setup();
         game.run(p1, p2, budget);
         return game.getWinner();
     }

@@ -20,7 +20,7 @@ public class Game
         this.verbose = false;
     }
 
-    public void start()
+    public void Setup()
     {
         gs = new GameState(gp);
         gs.setSeed(seed);
@@ -40,35 +40,28 @@ public class Game
         while (notFinished())
         {
             // Player 1 turn
-            while (gs.getActionPointsLeft() > 0)
-            {
-                Action a = p1.act(getObservation(), budget);
-                if (verbose) System.out.print("Player: " + gs.getTurn() + ", AP: " + gs.getActionPointsLeft() + " -> " + a);
-                if (a == null) break;
-                step(a);
-                if (verbose) System.out.println(", Score: " + gs.getP1Score() + " " + gs.getP2Score());
-            }
+            playTurn(p1, budget);
             if (verbose) System.out.println("---");
             fm.onPlayerTurnEnded(gs);
-
             nextPlayerTurn();
+
+            // Player 2 turn
             if (notFinished())
-            {
-                // Player 2 turn
-                while (gs.getActionPointsLeft() > 0)
-                {
-                    Action a = p2.act(getObservation(), budget);
-                    if (verbose) System.out.print("Player: " + gs.getTurn() + ", AP: " + gs.getActionPointsLeft() + " -> " + a);
-                    if (a == null) break;
-                    step(a);
-
-                    if (verbose) System.out.println(", Score: " + gs.getP1Score() + " " + gs.getP2Score());
-                }
-            }
+                playTurn(p2, budget);
             if (verbose) System.out.println("---");
             fm.onPlayerTurnEnded(gs);
-
             nextPlayerTurn();
+        }
+    }
+
+    private void playTurn(Player p, int budget) {
+        while (gs.getActionPointsLeft() > 0)
+        {
+            Action a = p.act(getObservation(), budget);
+            if (verbose) System.out.print("Player: " + gs.getTurn() + ", AP: " + gs.getActionPointsLeft() + " -> " + a);
+            if (a == null) break;
+            step(a);
+            if (verbose) System.out.println(", Score: " + gs.getP1Score() + " " + gs.getP2Score());
         }
     }
 

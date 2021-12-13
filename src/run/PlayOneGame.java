@@ -2,12 +2,9 @@ package run;
 
 import game.Game;
 import game.GameParameters;
-import heuristics.SimpleHeuristic;
 import players.*;
-import players.ntbea.OnlineNTBEAGenomeBased;
-import players.oe.OnlineEvolutionPlayer;
-import players.oe.OnlineEvolutionPlayerUseIllegal;
 
+//Class that can be run to play one game and print its results
 public class PlayOneGame
 {
     public static void main(String[] args)
@@ -29,7 +26,7 @@ public class PlayOneGame
         //Player p2 = new OnlineEvolutionPlayerUseIllegal(100, 0.1, 0.5, budget, new SimpleHeuristic());
         //Player p2 = new OnlineEvolutionPlayer(100, 0.1, 0.5, budget, new SimpleHeuristic());
 
-        game.start();
+        game.Setup();
         game.setVerboseOn();
         game.run(p1, p2, budget);
         System.out.println(p1.title() + " vs " + p2.title() + " : " + game.getWinner() + " -> Score: " + game.getP1Score() + " " + game.getP2Score());

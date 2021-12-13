@@ -5,6 +5,7 @@ import components.Card;
 import components.CardCollection;
 import game.GameState;
 
+//Forward model with the basic set of rules
 public class SimpleForwardModel implements ForwardModel
 {
     // Actualize the game state gs playing action a

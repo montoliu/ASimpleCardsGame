@@ -8,9 +8,9 @@ import rules.ForwardModel;
 
 import java.util.Scanner;
 
+//Player that is controlled by command line inputs
 public class HumanPlayer implements Player
 {
-
     @Override
     public Action act(GameState gs, int budget)
     {

@@ -7,6 +7,7 @@ import rules.ForwardModel;
 import java.util.List;
 import java.util.Random;
 
+//Player that plays random cards
 public class RandomPlayer implements Player
 {
     int seed;

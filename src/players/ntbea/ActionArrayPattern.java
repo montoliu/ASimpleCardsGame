@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 
 //TODO: does this need to implement comparable?
-
 public class ActionArrayPattern /*implements Comparable<ActionArrayPattern> */{
     public int[] v;
 

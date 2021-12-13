@@ -108,7 +108,7 @@ public class GameState
 
     private void drawCards()
     {
-        // hands
+        //Hands
         for (int i=0; i<gp.number_cards_on_hand; i++)
         {
             Card c1 = main_deck.pop();
@@ -118,7 +118,7 @@ public class GameState
             p2_hand.add(c2);
         }
 
-        // Board. Only number cards
+        //Board. Only number cards
         for (int i=0; i<gp.number_cards_on_board; i++)
         {
             Card c = main_deck.pop();
@@ -191,7 +191,7 @@ public class GameState
         temp.addAll(main_deck.getCards());
         temp.shuffle();
 
-        // draw P2
+        //Draw P2
         int n_cards_on_hand = p2_hand.getNumberOfCards();
         for (int i=0; i<n_cards_on_hand; i++)
         {
@@ -213,7 +213,7 @@ public class GameState
         temp.addAll(main_deck.getCards());
         temp.shuffle();
 
-        // draw P1
+        //Draw P1
         int n_cards_on_hand = p1_hand.getNumberOfCards();
         for (int i=0; i<n_cards_on_hand; i++)
         {
@@ -228,7 +228,7 @@ public class GameState
 
     public  int getNumberActionPoints()  { return gp.number_of_action_points; }
 
-    // Return a list of all possible actions that can be played given the actual state of the observation (game state)
+    //Return a list of all possible actions that can be played given the actual state of the observation (game state)
     public List<Action> getPossibleActions()
     {
         List<Action> actions = new ArrayList<>();

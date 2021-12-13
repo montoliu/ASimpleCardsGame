@@ -1,7 +1,5 @@
 package components;
 
-import components.Card;
-
 public class SpecialCard extends Card
 {
     public SpecialCard(int id, CardType type) { super(id, type, -1); }

@@ -8,6 +8,7 @@ import rules.ForwardModel;
 import java.util.ArrayList;
 import java.util.List;
 
+//Player that uses Monte Carlo Tree Search to decide what card to play
 public class MCTSPlayer implements Player
 {
     int          seed;
@@ -28,7 +29,7 @@ public class MCTSPlayer implements Player
     public Action act(GameState gs, int budget)
     {
         // In the first action point the player thinks the complete turn
-        // In the following turs, just get the first action in the remaining action included in the turn
+        // In the following turns, just get the first action in the remaining action included in the turn
         Action action;
         if (gs.getActionPointsLeft() == gs.getNumberActionPoints())
         {

@@ -8,6 +8,7 @@ import game.GameState;
 
 import java.util.List;
 
+//Forward model with extra rules to play longer games where players keep a full hand at the end of each turn
 public class FullHandForwardModel implements ForwardModel
 {
     @Override

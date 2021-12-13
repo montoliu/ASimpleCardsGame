@@ -9,6 +9,7 @@ import heuristics.SimpleHeuristic;
 
 import java.util.List;
 
+//Player that uses Greedy Search to decide what card to play
 public class GreedyPlayer implements Player
 {
     private ForwardModel fm;
